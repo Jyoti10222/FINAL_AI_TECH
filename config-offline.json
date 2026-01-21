@@ -1,0 +1,161 @@
+{
+  "price": 3500,
+  "period": "month",
+  "description": "In-person classroom training with hands-on labs",
+  "title": "Offline Batch Access Pass",
+  "batchFee": {
+    "price": 9876,
+    "currency": "₹",
+    "period": "course"
+  },
+  "stats": {
+    "available": 15,
+    "fastFilling": 3
+  },
+  "accessFee": {
+    "price": 1200000,
+    "currency": "₹",
+    "period": "year",
+    "description": "Access all offline batches"
+  },
+  "courses": [
+    {
+      "id": "java",
+      "name": "Java Full Stack",
+      "icon": "code",
+      "color": "orange",
+      "price": 59999,
+      "duration": "6 Months",
+      "batchCount": 8
+    },
+    {
+      "id": "python",
+      "name": "Python Full Stack",
+      "icon": "terminal",
+      "color": "yellow",
+      "price": 54999,
+      "duration": "5 Months",
+      "batchCount": 6
+    },
+    {
+      "id": "aiml",
+      "name": "AI and Machine Learning",
+      "icon": "smart_toy",
+      "color": "teal",
+      "price": 64999,
+      "duration": "6 Months",
+      "batchCount": 4
+    },
+    {
+      "id": "networking",
+      "name": "Networking",
+      "icon": "hub",
+      "color": "purple",
+      "price": 49999,
+      "duration": "4 Months",
+      "batchCount": 5
+    },
+    {
+      "id": "cloud",
+      "name": "Cloud Computing",
+      "icon": "cloud",
+      "color": "blue",
+      "price": 69999,
+      "duration": "6 Months",
+      "batchCount": 3
+    },
+    {
+      "id": "python",
+      "name": "python",
+      "category": "Programming",
+      "room": "TBD",
+      "price": 500,
+      "totalSeats": 30,
+      "enrolledSeats": 0,
+      "duration": "3 Months",
+      "instructor": "TBD"
+    },
+    {
+      "id": "java-full-stack",
+      "name": "Java Full Stack",
+      "category": "Programming",
+      "room": "TBD",
+      "price": 5000,
+      "totalSeats": 30,
+      "enrolledSeats": 0,
+      "duration": "3 Months",
+      "instructor": "TBD"
+    }
+  ],
+  "batches": [
+    {
+      "id": "batch-1",
+      "courseId": "java",
+      "faculty": "Khan ",
+      "startTime": "09:00 AM",
+      "endTime": "12:00 PM",
+      "day": "Mon",
+      "duration": "3 Hours"
+    },
+    {
+      "id": "batch-2",
+      "courseId": "python",
+      "faculty": "Dr. Guido van Rossum",
+      "startTime": "02:00 PM",
+      "endTime": "05:00 PM",
+      "day": "Tue",
+      "duration": "3 Hours"
+    },
+    {
+      "id": "batch-3",
+      "courseId": "aiml",
+      "faculty": "Dr. Alan Turing",
+      "startTime": "10:00 AM",
+      "endTime": "01:00 PM",
+      "day": "Wed",
+      "duration": "3 Hours"
+    },
+    {
+      "id": "batch-4",
+      "courseId": "networking",
+      "faculty": "Vint Cerf",
+      "startTime": "03:00 PM",
+      "endTime": "06:00 PM",
+      "day": "Thu",
+      "duration": "3 Hours"
+    },
+    {
+      "id": "batch-5",
+      "courseId": "cloud",
+      "faculty": "Werner Vogels",
+      "startTime": "09:00 AM",
+      "endTime": "12:00 PM",
+      "day": "Fri",
+      "duration": "3 Hours"
+    },
+    {
+      "id": "batch-cloud-Sat-1768492558189",
+      "courseId": "cloud",
+      "faculty": "Vinod",
+      "day": "Sat",
+      "startTime": "02:25",
+      "endTime": "03:25",
+      "duration": "2 Hours",
+      "enrolledStudents": 0,
+      "maxStudents": 30,
+      "status": "active"
+    },
+    {
+      "id": "batch-java-Thu-1768497341608",
+      "courseId": "java",
+      "faculty": "Sahebagouda",
+      "day": "Thu",
+      "startTime": "10:00",
+      "endTime": "12:00",
+      "duration": "2 Hours",
+      "enrolledStudents": 0,
+      "maxStudents": 30,
+      "status": "active"
+    }
+  ]
+}

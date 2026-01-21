@@ -1,0 +1,48 @@
+{
+  "trainers": [
+    {
+      "id": "TRN-1768915432706",
+      "name": "JetKing",
+      "email": "jyotismulimani2104@gmail.com",
+      "password": "21161234",
+      "specialization": "AI & Machine Learning, Java Programming",
+      "experience": 1,
+      "status": "Active",
+      "createdAt": "2026-01-20T13:23:52.708Z",
+      "updatedAt": "2026-01-20T13:23:52.708Z"
+    },
+    {
+      "id": "TRN-1768886505512",
+      "name": "Kashif Khan",
+      "email": "kashif@cordinal.com",
+      "password": "1234",
+      "specialization": [
+        "Artificial Intelligence",
+        "Machine Learning",
+        "Cloud Computing",
+        "Cybersecurity"
+      ],
+      "experience": "0",
+      "status": "Active",
+      "createdAt": "2026-01-20T05:21:45.512Z",
+      "updatedAt": "2026-01-20T05:21:45.512Z"
+    },
+    {
+      "id": "TRN-1768886301819",
+      "name": "Jyoti Mulimani",
+      "email": "jyotimulimani2104@gmail.com",
+      "password": "2116",
+      "specialization": [
+        "Artificial Intelligence",
+        "Full Stack Dev"
+      ],
+      "experience": "0",
+      "status": "Active",
+      "createdAt": "2026-01-20T05:18:21.822Z",
+      "updatedAt": "2026-01-20T05:18:21.822Z",
+      "resetToken": "c854fae318dfe3239b9ed12ea5c2a69f90d7ec3aaae7a2c6ea827e21a64f4133",
+      "resetTokenExpires": 1768975690048
+    }
+  ],
+  "lastUpdated": "2026-01-21T05:08:10.049Z"
+}
