@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Trainer Management | AI-TECH PRO</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+        rel="stylesheet" />
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#137fec",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#101922",
+                    },
+                    fontFamily: {
+                        "display": ["Inter"]
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        .toggle-checkbox:checked {
+            background-color: #3b82f6;
+            border-color: #3b82f6;
+        }
+
+        .toggle-checkbox:checked+.toggle-label {
+            transform: translateX(1.25rem);
+        }
+    </style>
+</head>
+
+<body class="bg-background-light dark:bg-background-dark text-white min-h-screen flex flex-col">
+
+    <!-- Toast Container -->
+    <div id="toast-container" class="fixed top-4 right-4 z-[100] flex flex-col gap-2"></div>
+
+    <!-- Top Navigation Bar -->
+    <header
+        class="flex items-center justify-between border-b border-slate-700 dark:border-[#233648] px-6 py-3 bg-slate-900 dark:bg-background-dark sticky top-0 z-50">
+        <div class="flex items-center gap-8">
+            <div class="flex items-center gap-4 text-primary">
+                <div class="size-8 flex items-center justify-center bg-primary rounded-lg text-white">
+                    <span class="material-symbols-outlined">school</span>
+                </div>
+                <h2 class="text-white text-lg font-bold leading-tight">AI-TECH PRO</h2>
+            </div>
+        </div>
+        <div class="flex items-center gap-3">
+            <a href="A9Admin.html"
+                class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-white rounded-lg flex items-center gap-2 transition-colors">
+                <span class="material-symbols-outlined text-[20px]">arrow_back</span>
+                Back to Admin
+            </a>
+        </div>
+    </header>
+
+    <div class="flex flex-1">
+        <!-- Main Content Area -->
+        <main class="flex-1 overflow-x-hidden pb-12">
+
+            <!-- Page Heading -->
+            <div class="flex flex-wrap justify-between items-end gap-3 p-6 lg:px-8 max-w-7xl mx-auto w-full">
+                <div class="flex flex-col gap-1">
+                    <h1 class="text-white text-3xl font-black leading-tight">
+                        Trainer Management
+                    </h1>
+                    <p class="text-slate-400 text-base font-normal leading-normal max-w-xl">
+                        Manage trainer accounts and their active status. Toggle trainers on/off without deleting their
+                        accounts.
+                    </p>
+                </div>
+                <button onclick="openAddTrainerModal()"
+                    class="flex items-center justify-center gap-2 px-6 py-3 bg-primary text-white rounded-lg font-bold hover:bg-primary/90 transition-colors shadow-lg shadow-primary/20">
+                    <span class="material-symbols-outlined">person_add</span>
+                    Add New Trainer
+                </button>
+            </div>
+
+            <!-- Stats Cards -->
+            <div class="max-w-7xl mx-auto w-full px-6 lg:px-8 mb-6">
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                    <div class="bg-slate-900 border border-slate-700 rounded-xl p-6">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-slate-400 text-sm font-medium">Total Trainers</span>
+                            <span class="material-symbols-outlined text-blue-500">group</span>
+                        </div>
+                        <p id="totalTrainers" class="text-3xl font-bold text-white">0</p>
+                    </div>
+                    <div class="bg-slate-900 border border-slate-700 rounded-xl p-6">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-slate-400 text-sm font-medium">Active</span>
+                            <span class="material-symbols-outlined text-green-500">check_circle</span>
+                        </div>
+                        <p id="activeTrainers" class="text-3xl font-bold text-green-500">0</p>
+                    </div>
+                    <div class="bg-slate-900 border border-slate-700 rounded-xl p-6">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-slate-400 text-sm font-medium">Inactive</span>
+                            <span class="material-symbols-outlined text-red-500">cancel</span>
+                        </div>
+                        <p id="inactiveTrainers" class="text-3xl font-bold text-red-500">0</p>
+                    </div>
+                    <div class="bg-slate-900 border border-slate-700 rounded-xl p-6">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-slate-400 text-sm font-medium">Specializations</span>
+                            <span class="material-symbols-outlined text-purple-500">category</span>
+                        </div>
+                        <p id="specializations" class="text-3xl font-bold text-purple-500">0</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Trainers Table -->
+            <div class="max-w-7xl mx-auto w-full px-6 lg:px-8 mt-6">
+                <div class="bg-slate-900 border border-slate-700 rounded-xl overflow-hidden shadow-sm">
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr class="bg-slate-950 border-b border-slate-700">
+                                    <th class="px-6 py-4 text-white text-xs font-bold uppercase tracking-wider">
+                                        Trainer Info</th>
+                                    <th class="px-6 py-4 text-white text-xs font-bold uppercase tracking-wider">
+                                        Email</th>
+                                    <th class="px-6 py-4 text-white text-xs font-bold uppercase tracking-wider">
+                                        Phone</th>
+                                    <th class="px-6 py-4 text-white text-xs font-bold uppercase tracking-wider">
+                                        Specialization</th>
+                                    <th class="px-6 py-4 text-white text-xs font-bold uppercase tracking-wider">
+                                        Experience</th>
+                                    <th class="px-6 py-4 text-white text-xs font-bold uppercase tracking-wider">
+                                        Status</th>
+                                    <th
+                                        class="px-6 py-4 text-slate-400 text-xs font-bold uppercase tracking-wider text-right">
+                                        Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="trainersTableBody" class="divide-y divide-slate-700">
+                                <!-- Rows will be dynamically loaded here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Add Trainer Modal -->
+    <div id="add-trainer-modal" class="fixed inset-0 bg-black/60 z-50 hidden items-center justify-center p-4">
+        <div class="bg-slate-900 rounded-xl w-full max-w-2xl max-h-[85vh] flex flex-col shadow-2xl">
+            <div class="p-6 border-b border-slate-700 flex justify-between items-center">
+                <h3 class="text-xl font-bold text-white flex items-center gap-2">
+                    <span class="material-symbols-outlined text-primary">person_add</span>
+                    Add New Trainer
+                </h3>
+                <button onclick="closeAddTrainerModal()" class="text-slate-400 hover:text-white">
+                    <span class="material-symbols-outlined">close</span>
+                </button>
+            </div>
+            <div class="p-6 overflow-y-auto flex-1">
+                <form id="addTrainerForm" class="space-y-4">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-bold text-slate-400 mb-2">Full Name *</label>
+                            <input type="text" id="trainerName" required
+                                class="w-full bg-slate-800 border border-slate-600 rounded-lg px-4 py-2 text-white focus:ring-2 focus:ring-primary focus:border-transparent"
+                                placeholder="John Doe">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-bold text-slate-400 mb-2">Email *</label>
+                            <input type="email" id="trainerEmail" required
+                                class="w-full bg-slate-800 border border-slate-600 rounded-lg px-4 py-2 text-white focus:ring-2 focus:ring-primary focus:border-transparent"
+                                placeholder="john@example.com">
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-bold text-slate-400 mb-2">Phone *</label>
+                            <input type="tel" id="trainerPhone" required
+                                class="w-full bg-slate-800 border border-slate-600 rounded-lg px-4 py-2 text-white focus:ring-2 focus:ring-primary focus:border-transparent"
+                                placeholder="+91 9876543210">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-bold text-slate-400 mb-2">Password *</label>
+                            <input type="password" id="trainerPassword" required minlength="6"
+                                class="w-full bg-slate-800 border border-slate-600 rounded-lg px-4 py-2 text-white focus:ring-2 focus:ring-primary focus:border-transparent"
+                                placeholder="Min 6 characters">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-bold text-slate-400 mb-2">Specializations * (Select
+                            multiple)</label>
+                        <div class="bg-slate-800 border border-slate-600 rounded-lg p-4 max-h-48 overflow-y-auto">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                <label class="flex items-center gap-2 cursor-pointer hover:bg-slate-700 p-2 rounded">
+                                    <input type="checkbox" class="specialization-checkbox" value="Cloud Computing">
+                                    <span class="text-white text-sm">Cloud Computing</span>
+                                </label>
+                                <label class="flex items-center gap-2 cursor-pointer hover:bg-slate-700 p-2 rounded">
+                                    <input type="checkbox" class="specialization-checkbox"
+                                        value="AI & Machine Learning">
+                                    <span class="text-white text-sm">AI & Machine Learning</span>
+                                </label>
+                                <label class="flex items-center gap-2 cursor-pointer hover:bg-slate-700 p-2 rounded">
+                                    <input type="checkbox" class="specialization-checkbox" value="Java Programming">
+                                    <span class="text-white text-sm">Java Programming</span>
+                                </label>
+                                <label class="flex items-center gap-2 cursor-pointer hover:bg-slate-700 p-2 rounded">
+                                    <input type="checkbox" class="specialization-checkbox" value=".NET Development">
+                                    <span class="text-white text-sm">.NET Development</span>
+                                </label>
+                                <label class="flex items-center gap-2 cursor-pointer hover:bg-slate-700 p-2 rounded">
+                                    <input type="checkbox" class="specialization-checkbox" value="Cybersecurity">
+                                    <span class="text-white text-sm">Cybersecurity</span>
+                                </label>
+                                <label class="flex items-center gap-2 cursor-pointer hover:bg-slate-700 p-2 rounded">
+                                    <input type="checkbox" class="specialization-checkbox" value="Automation Testing">
+                                    <span class="text-white text-sm">Automation Testing</span>
+                                </label>
+                                <label class="flex items-center gap-2 cursor-pointer hover:bg-slate-700 p-2 rounded">
+                                    <input type="checkbox" class="specialization-checkbox" value="C Programming">
+                                    <span class="text-white text-sm">C Programming</span>
+                                </label>
+                                <label class="flex items-center gap-2 cursor-pointer hover:bg-slate-700 p-2 rounded">
+                                    <input type="checkbox" class="specialization-checkbox" value="Python Full Stack">
+                                    <span class="text-white text-sm">Python Full Stack</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-bold text-slate-400 mb-2">Years of Experience *</label>
+                        <input type="number" id="trainerExperience" required min="0" max="50"
+                            class="w-full bg-slate-800 border border-slate-600 rounded-lg px-4 py-2 text-white focus:ring-2 focus:ring-primary focus:border-transparent"
+                            placeholder="5">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-bold text-slate-400 mb-2">Bio</label>
+                        <textarea id="trainerBio" rows="3"
+                            class="w-full bg-slate-800 border border-slate-600 rounded-lg px-4 py-2 text-white focus:ring-2 focus:ring-primary focus:border-transparent"
+                            placeholder="Brief description about the trainer..."></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="p-6 border-t border-slate-700 bg-slate-950 rounded-b-xl flex justify-end gap-3">
+                <button onclick="closeAddTrainerModal()"
+                    class="px-4 py-2 bg-slate-800 border border-slate-600 text-white rounded-lg hover:bg-slate-700 font-medium transition-colors">
+                    Cancel
+                </button>
+                <button onclick="saveTrainer()"
+                    class="px-6 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 font-bold transition-colors shadow-lg shadow-primary/20">
+                    Add Trainer
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script>
+        const API_BASE = 'http://localhost:8080/api';
+        let trainers = [];
+
+        // Show Toast Notification
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+
+            const bgColor = type === 'success' ? 'bg-green-500' : 'bg-red-500';
+            const icon = type === 'success' ? 'check_circle' : 'error';
+
+            toast.className = `flex items-center w-full max-w-xs p-4 mb-4 text-white rounded-lg shadow ${bgColor}`;
+            toast.innerHTML = `
+                <div class="inline-flex items-center justify-center flex-shrink-0 w-8 h-8 rounded-lg bg-slate-900/20">
+                    <span class="material-symbols-outlined text-xl">${icon}</span>
+                </div>
+                <div class="ml-3 text-sm font-normal">${message}</div>
+                <button type="button" class="ml-auto -mx-1.5 -my-1.5 bg-transparent text-white rounded-lg p-1.5 hover:bg-slate-900/10 inline-flex h-8 w-8" onclick="this.parentElement.remove()">
+                    <span class="material-symbols-outlined text-lg">close</span>
+                </button>
+            `;
+
+            container.appendChild(toast);
+            setTimeout(() => toast.remove(), 3000);
+        }
+
+        // LocalStorage Functions
+        const STORAGE_KEY = 'trainers_data';
+
+        function saveToLocalStorage() {
+            try {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(trainers));
+            } catch (error) {
+                console.error('Error saving to localStorage:', error);
+            }
+        }
+
+        function loadFromLocalStorage() {
+            try {
+                const data = localStorage.getItem(STORAGE_KEY);
+                return data ? JSON.parse(data) : [];
+            } catch (error) {
+                console.error('Error loading from localStorage:', error);
+                return [];
+            }
+        }
+
+        // Load Trainers
+        async function loadTrainers() {
+            try {
+                // 1. Try Fetching from Backend
+                try {
+                    const res = await fetch('http://localhost:8080/api/trainers');
+                    const data = await res.json();
+                    if (data.success && Array.isArray(data.data)) {
+                        trainers = data.data;
+                        saveToLocalStorage(); // Sync backend data to local
+                        renderTrainers();
+                        updateStats();
+                        console.log('Loaded trainers from Backend API');
+                        return;
+                    }
+                } catch (apiErr) {
+                    console.warn('Backend fetch failed, falling back to local:', apiErr);
+                }
+
+                // 2. Fallback to LocalStorage
+                trainers = loadFromLocalStorage();
+                renderTrainers();
+                updateStats();
+
+                if (trainers.length === 0) {
+                    console.log('No trainers found in localStorage');
+                }
+            } catch (error) {
+                console.error('Error loading trainers:', error);
+                trainers = [];
+                renderTrainers();
+                updateStats();
+            }
+        }
+
+        // Render Trainers Table
+        function renderTrainers() {
+            const tbody = document.getElementById('trainersTableBody');
+            tbody.innerHTML = '';
+
+            if (trainers.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="7" class="px-6 py-12 text-center text-slate-400">
+                            <span class="material-symbols-outlined text-6xl mb-4 block opacity-20">person_off</span>
+                            <p class="text-lg font-medium">No trainers found</p>
+                            <p class="text-sm mt-2">Click "Add New Trainer" to get started</p>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            trainers.forEach((trainer, index) => {
+                const row = document.createElement('tr');
+                row.className = "group hover:bg-slate-950/50 transition-colors";
+                row.innerHTML = `
+                    <td class="px-6 py-4">
+                        <div class="flex items-center gap-3">
+                            <div class="size-10 rounded-full bg-primary/20 flex items-center justify-center text-sm text-primary font-bold">
+                                ${getInitials(trainer.name)}
+                            </div>
+                            <div>
+                                <p class="text-white font-semibold">${trainer.name}</p>
+                                <p class="text-slate-400 text-xs">${trainer.bio || 'No bio available'}</p>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="px-6 py-4">
+                        <p class="text-slate-400 text-sm">${trainer.email}</p>
+                    </td>
+                    <td class="px-6 py-4">
+                        <p class="text-slate-400 text-sm">${trainer.phone}</p>
+                    </td>
+                    <td class="px-6 py-4">
+                        <span class="px-3 py-1 bg-blue-500/10 text-blue-400 rounded-full text-xs font-medium">
+                            ${trainer.specialization}
+                        </span>
+                    </td>
+                    <td class="px-6 py-4">
+                        <p class="text-slate-400 text-sm">${trainer.experience} years</p>
+                    </td>
+                    <td class="px-6 py-4">
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" class="sr-only toggle-checkbox" ${trainer.status === 'active' ? 'checked' : ''} 
+                                onchange="toggleTrainerStatus(${index})">
+                            <div class="w-11 h-6 bg-slate-700 rounded-full relative">
+                                <div class="toggle-label absolute top-0.5 left-0.5 bg-white w-5 h-5 rounded-full transition-transform duration-200"></div>
+                            </div>
+                            <span class="ml-3 text-sm font-medium ${trainer.status === 'active' ? 'text-blue-400' : 'text-red-400'}">
+                                ${trainer.status === 'active' ? 'Active' : 'Inactive'}
+                            </span>
+                        </label>
+                    </td>
+                    <td class="px-6 py-4 text-right">
+                        <button onclick="editTrainer(${index})" 
+                            class="text-blue-500 hover:text-blue-400 mr-3" title="Edit">
+                            <span class="material-symbols-outlined">edit</span>
+                        </button>
+                        <button onclick="deleteTrainer(${index})" 
+                            class="text-red-500 hover:text-red-400" title="Delete">
+                            <span class="material-symbols-outlined">delete</span>
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        // Update Stats
+        function updateStats() {
+            const total = trainers.length;
+            const active = trainers.filter(t => t.status === 'active').length;
+            const inactive = total - active;
+            const specs = new Set(trainers.map(t => t.specialization)).size;
+
+            document.getElementById('totalTrainers').textContent = total;
+            document.getElementById('activeTrainers').textContent = active;
+            document.getElementById('inactiveTrainers').textContent = inactive;
+            document.getElementById('specializations').textContent = specs;
+        }
+
+        // Get Initials
+        function getInitials(name) {
+            return name ? name.split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2) : '??';
+        }
+
+        // Toggle Trainer Status
+        function toggleTrainerStatus(index) {
+            const trainer = trainers[index];
+            const newStatus = trainer.status === 'active' ? 'inactive' : 'active';
+
+            // Update status
+            trainers[index].status = newStatus;
+
+            // Save to localStorage
+            saveToLocalStorage();
+
+            // Update UI
+            renderTrainers();
+            updateStats();
+
+            showToast(`Trainer ${newStatus === 'active' ? 'activated' : 'deactivated'} successfully`);
+        }
+
+        // Modal Functions
+        function openAddTrainerModal() {
+            document.getElementById('add-trainer-modal').classList.remove('hidden');
+            document.getElementById('add-trainer-modal').classList.add('flex');
+            document.getElementById('addTrainerForm').reset();
+        }
+
+        function closeAddTrainerModal() {
+            document.getElementById('add-trainer-modal').classList.add('hidden');
+            document.getElementById('add-trainer-modal').classList.remove('flex');
+        }
+
+        // Save Trainer
+        function saveTrainer() {
+            const name = document.getElementById('trainerName').value.trim();
+            const email = document.getElementById('trainerEmail').value.trim();
+            const phone = document.getElementById('trainerPhone').value.trim();
+            const password = document.getElementById('trainerPassword').value.trim();
+            const experience = document.getElementById('trainerExperience').value;
+            const bio = document.getElementById('trainerBio').value.trim();
+
+            // Get selected specializations from checkboxes
+            const specializationCheckboxes = document.querySelectorAll('.specialization-checkbox:checked');
+            const specializations = Array.from(specializationCheckboxes).map(cb => cb.value);
+
+            if (!name || !email || !phone || !password || !experience) {
+                showToast('Please fill all required fields', 'error');
+                return;
+            }
+
+            // Check for duplicate email
+            if (trainers.some(t => t.email.trim().toLowerCase() === email.toLowerCase())) {
+                showToast('A trainer with this email already exists', 'error');
+                return;
+            }
+
+            if (specializations.length === 0) {
+                showToast('Please select at least one specialization', 'error');
+                return;
+            }
+
+            if (password.length < 6) {
+                showToast('Password must be at least 6 characters', 'error');
+                return;
+            }
+
+            // Prepare payload (do NOT send ID, let backend generate it)
+            const trainerPayload = {
+                name,
+                email,
+                phone,
+                password,
+                specialization: specializations.join(', '),
+                experience: parseInt(experience),
+                bio,
+                status: 'Active'
+            };
+
+            // 1. Try Saving to Backend API
+            fetch('http://localhost:8080/api/trainers', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(trainerPayload)
+            })
+                .then(res => res.json())
+                .then(data => {
+                    let finalTrainer;
+
+                    if (data.success) {
+                        // Success: Use server-generated trainer (has ID)
+                        console.log('Saved to backend:', data.message);
+                        finalTrainer = data.data;
+                        finalTrainer.specializations = specializations; // Ensure array is kept if backend didn't return it
+                        showToast('Trainer saved to Server & Local!', 'success');
+                    } else {
+                        // Fail (Logic/Validation): Fallback to local with new ID
+                        console.warn('Backend rejected:', data.message);
+                        showToast(`Saved locally only (Server: ${data.message})`, 'warning');
+                        finalTrainer = {
+                            id: 'local-' + Date.now(),
+                            ...trainerPayload,
+                            specializations,
+                            createdAt: new Date().toISOString()
+                        };
+                    }
+
+                    // Add to local state and save
+                    trainers.push(finalTrainer);
+                    saveToLocalStorage();
+                    renderTrainers();
+                    updateStats();
+                    closeAddTrainerModal();
+                })
+                .catch(err => {
+                    // Fail (Network): Fallback to local
+                    console.error('Backend error:', err);
+                    showToast('Saved locally only (Server offline)', 'warning');
+
+                    const finalTrainer = {
+                        id: 'local-' + Date.now(),
+                        ...trainerPayload,
+                        specializations,
+                        createdAt: new Date().toISOString()
+                    };
+                    trainers.push(finalTrainer);
+                    saveToLocalStorage();
+                    renderTrainers();
+                    updateStats();
+                    closeAddTrainerModal();
+                });
+        }
+
+        // Edit Trainer (placeholder)
+        function editTrainer(index) {
+            showToast('Edit functionality coming soon', 'error');
+        }
+
+        // Delete Trainer
+        function deleteTrainer(index) {
+            if (!confirm('Are you sure you want to delete this trainer?')) return;
+
+            try {
+                // Remove from array
+                trainers.splice(index, 1);
+
+                // Save to localStorage
+                saveToLocalStorage();
+
+                // Update UI
+                renderTrainers();
+                updateStats();
+                showToast('Trainer deleted successfully');
+            } catch (error) {
+                console.error('Error deleting trainer:', error);
+                trainers.splice(index, 1);
+                saveToLocalStorage();
+                renderTrainers();
+                updateStats();
+                showToast('Trainer deleted (local only)');
+            }
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', loadTrainers);
+    </script>
+</body>
+
+</html>
