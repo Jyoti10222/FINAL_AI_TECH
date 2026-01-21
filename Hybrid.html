@@ -1,0 +1,1028 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Hybrid Batch Schedule - AI-TECH PRO LMS</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Noto+Sans:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet" />
+    <!-- Material Symbols -->
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+        rel="stylesheet" />
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <!-- Theme Configuration -->
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#137fec",
+                        "primary-hover": "#0f6bd0",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#101922",
+                        "surface-light": "#ffffff",
+                        "surface-dark": "#1a2632",
+                        "border-light": "#e7edf3",
+                        "border-dark": "#2a3b4c",
+                        "text-main": "#0d141b",
+                        "text-secondary": "#4c739a",
+                        "text-main-dark": "#e2e8f0",
+                        "text-secondary-dark": "#94a3b8",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "Noto Sans", "sans-serif"],
+                        "body": ["Inter", "Noto Sans", "sans-serif"],
+                    },
+                    borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" },
+                },
+            },
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            font-size: 20px;
+            vertical-align: middle;
+        }
+
+        .material-symbols-outlined.filled {
+            font-variation-settings: 'FILL' 1;
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+
+        /* Glassmorphism effect */
+        .glass {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .dark .glass {
+            background: rgba(26, 38, 50, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Gradient backgrounds */
+        .gradient-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .gradient-online {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+
+        .gradient-offline {
+            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+        }
+
+        /* Animations */
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-slide-in {
+            animation: slideIn 0.3s ease-out;
+        }
+
+        /* Mode badge styles */
+        .mode-badge-online {
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
+            color: white;
+        }
+
+        .mode-badge-offline {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: white;
+        }
+    </style>
+</head>
+
+<body
+    class="bg-background-light dark:bg-background-dark text-text-main dark:text-text-main-dark min-h-screen flex flex-col font-display selection:bg-primary/20">
+
+    <!-- Top Navigation -->
+    <header
+        class="bg-surface-light dark:bg-surface-dark border-b border-border-light dark:border-border-dark sticky top-0 z-50 glass">
+        <div class="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <!-- Logo & Back Button -->
+                <div class="flex items-center gap-3">
+                    <a href="A4Onboarding.html"
+                        class="flex items-center gap-2 text-sm font-semibold text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-primary transition-colors">
+                        <span class="material-symbols-outlined">arrow_back</span>
+                        Back
+                    </a>
+                    <div class="text-primary">
+                        <span class="material-symbols-outlined filled text-3xl">school</span>
+                    </div>
+                    <h2
+                        class="text-text-main dark:text-text-main-dark text-lg font-bold tracking-tight hidden sm:block">
+                        Hybrid Batches
+                    </h2>
+                </div>
+                <!-- Nav Links -->
+                <nav class="hidden md:flex items-center gap-6">
+                    <a class="text-text-main dark:text-text-main-dark text-sm font-medium hover:text-primary transition-colors"
+                        href="#">Courses</a>
+                    <a class="text-text-secondary dark:text-text-secondary-dark text-sm font-medium hover:text-primary transition-colors"
+                        href="#">My Learning</a>
+                    <a class="text-text-secondary dark:text-text-secondary-dark text-sm font-medium hover:text-primary transition-colors"
+                        href="#">Support</a>
+                </nav>
+                <!-- Profile -->
+                <div class="flex items-center gap-4">
+                    <button
+                        class="text-text-secondary dark:text-text-secondary-dark hover:text-primary p-2 rounded-full transition-colors">
+                        <span class="material-symbols-outlined">notifications</span>
+                    </button>
+                    <div class="bg-center bg-no-repeat bg-cover rounded-full size-9 ring-2 ring-primary/10 cursor-pointer"
+                        style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAZkMRVnjRBWsJ4JqflbrC9XYuIYh1nR0y9q2NF3Yj59wfXD3a5vgEFYpaNC-NDIKg_zsiK1kE1MU8Zn8ZUyyLMWeRSv-NcC0t6GrW_BQHz5r7l1v-PMUSbCHKG9-He3abyhNubGSlJRV6L9yC54pptTOqJqV_qHFbfhZiBKNxmJqFXx1LAJB4_VqKS_zo_O4IdcudH6IRHCtqtoYVjLKHwBMZUu6VALFL-EBRVKCzWGAXQcWXyDMDtNhWsVhCn2bZ8uJUFtT-XXf4");'>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-grow w-full max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- Page Header -->
+        <div class="mb-8">
+            <h1 id="page-title"
+                class="text-3xl md:text-4xl font-black text-text-main dark:text-text-main-dark tracking-tight mb-3">
+                Hybrid Batch Schedule
+            </h1>
+            <p id="page-subtitle" class="text-text-secondary dark:text-text-secondary-dark text-lg max-w-3xl">
+                Experience the best of both worlds - flexible online sessions combined with hands-on offline labs
+            </p>
+        </div>
+
+        <!-- Pricing Banner -->
+        <div id="pricing-banner"
+            class="bg-gradient-to-r from-primary to-blue-600 rounded-xl shadow-lg p-6 mb-8 text-white">
+            <div class="flex flex-col md:flex-row items-center justify-between gap-4">
+                <div class="flex-1">
+                    <div class="flex items-center gap-3 mb-2">
+                        <span class="material-symbols-outlined text-3xl">all_inclusive</span>
+                        <h3 class="text-2xl font-bold">All-Access Pass Available</h3>
+                    </div>
+                    <p class="text-white/90 text-sm md:text-base">
+                        Get unlimited access to all hybrid batches for just <span id="access-price"
+                            class="font-bold text-xl">₹2,800</span><span id="access-period">/month</span>
+                    </p>
+                </div>
+                <div class="flex gap-3">
+                    <!-- Button removed as per user request -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Individual Course Pricing -->
+        <div id="individual-pricing-section"
+            class="bg-white dark:bg-surface-dark rounded-xl border border-border-light dark:border-border-dark shadow-sm p-6 mb-8"
+            style="display: none;">
+            <div class="flex items-center justify-between mb-4">
+                <div>
+                    <h3 class="text-lg font-bold text-text-main dark:text-text-main-dark">Individual Course Pricing</h3>
+                    <p class="text-sm text-text-secondary dark:text-text-secondary-dark">Purchase individual courses
+                        without subscription</p>
+                </div>
+            </div>
+            <div id="individual-courses-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <!-- Courses will be loaded here -->
+            </div>
+        </div>
+
+        <!-- Mode Toggle & Filters -->
+        <div
+            class="bg-surface-light dark:bg-surface-dark rounded-xl border border-border-light dark:border-border-dark shadow-sm p-6 mb-8">
+            <!-- Mode Toggle -->
+            <div class="flex flex-wrap items-center gap-4 mb-6">
+                <h3
+                    class="text-sm font-semibold text-text-secondary dark:text-text-secondary-dark uppercase tracking-wider">
+                    View Mode:
+                </h3>
+                <div class="flex gap-2">
+                    <button onclick="setViewMode('all')" id="mode-all"
+                        class="px-4 py-2 rounded-lg bg-primary text-white text-sm font-medium shadow-sm shadow-primary/30 transition-all">
+                        All Batches
+                    </button>
+                    <button onclick="setViewMode('online')" id="mode-online"
+                        class="px-4 py-2 rounded-lg bg-background-light dark:bg-background-dark text-text-secondary dark:text-text-secondary-dark hover:text-text-main dark:hover:text-text-main-dark text-sm font-medium border border-transparent hover:border-border-light dark:hover:border-border-dark transition-all">
+                        📱 Online Only
+                    </button>
+                    <button onclick="setViewMode('offline')" id="mode-offline"
+                        class="px-4 py-2 rounded-lg bg-background-light dark:bg-background-dark text-text-secondary dark:text-text-secondary-dark hover:text-text-main dark:hover:text-text-main-dark text-sm font-medium border border-transparent hover:border-border-light dark:hover:border-border-dark transition-all">
+                        🏢 Offline Only
+                    </button>
+                </div>
+            </div>
+
+            <!-- Filters -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <!-- Search -->
+                <div class="md:col-span-2">
+                    <div class="relative group">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <span
+                                class="material-symbols-outlined text-text-secondary dark:text-text-secondary-dark">search</span>
+                        </div>
+                        <input id="search-input" oninput="filterBatches()"
+                            class="block w-full pl-10 pr-3 py-2.5 border-none rounded-lg bg-background-light dark:bg-background-dark text-text-main dark:text-text-main-dark placeholder-text-secondary focus:ring-2 focus:ring-primary text-sm"
+                            placeholder="Search courses, instructors..." type="text" />
+                    </div>
+                </div>
+                <!-- Course Filter -->
+                <div>
+                    <select id="course-filter" onchange="filterBatches()"
+                        class="block w-full px-3 py-2.5 border-none rounded-lg bg-background-light dark:bg-background-dark text-text-main dark:text-text-main-dark focus:ring-2 focus:ring-primary text-sm appearance-none cursor-pointer">
+                        <option value="">All Courses</option>
+                    </select>
+                </div>
+                <!-- Instructor Filter -->
+                <div>
+                    <select id="instructor-filter" onchange="filterBatches()"
+                        class="block w-full px-3 py-2.5 border-none rounded-lg bg-background-light dark:bg-background-dark text-text-main dark:text-text-main-dark focus:ring-2 focus:ring-primary text-sm appearance-none cursor-pointer">
+                        <option value="">All Instructors</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- Calendar Navigation & Header -->
+        <div class="mb-6">
+            <div
+                class="flex flex-col xl:flex-row items-start xl:items-center justify-between gap-4 p-4 rounded-xl bg-card-light dark:bg-card-dark border border-border-light dark:border-border-dark shadow-sm mb-4">
+                <div class="flex items-center justify-between w-full xl:w-auto gap-4">
+                    <span id="calendar-month-year"
+                        class="text-lg font-bold text-slate-900 dark:text-white whitespace-nowrap hidden sm:block">October
+                        2023</span>
+                    <div class="flex items-center bg-slate-100 dark:bg-slate-800 rounded-lg p-1">
+                        <button id="btn-prev-week"
+                            class="p-2 rounded-md hover:bg-white dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 shadow-sm transition-all"><span
+                                class="material-symbols-outlined block">chevron_left</span></button>
+                        <button id="btn-today"
+                            class="px-4 py-2 rounded-md text-sm font-semibold text-slate-900 dark:text-white hover:bg-white dark:hover:bg-slate-700 transition-all">Today</button>
+                        <button id="btn-next-week"
+                            class="p-2 rounded-md hover:bg-white dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 shadow-sm transition-all"><span
+                                class="material-symbols-outlined block">chevron_right</span></button>
+                    </div>
+                </div>
+            </div>
+            <!-- Dynamic Header -->
+            <div
+                class="rounded-xl border border-border-light dark:border-border-dark overflow-hidden bg-white dark:bg-slate-900/50">
+                <div id="calendar-grid-header" class="grid grid-cols-7 min-w-[300px]">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Batch Grid -->
+        <div id="batches-grid" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 mb-10">
+            <!-- Batches will be loaded here -->
+            <div class="col-span-full text-center py-12 text-text-secondary dark:text-text-secondary-dark">
+                <span class="material-symbols-outlined text-4xl mb-4 block">hourglass_empty</span>
+                Loading batches...
+            </div>
+        </div>
+
+        <!-- Request Custom Batch Button -->
+        <div class="text-center">
+            <button onclick="openCustomBatchModal()"
+                class="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-primary to-blue-600 text-white rounded-lg font-semibold shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-0.5">
+                <span class="material-symbols-outlined">add_circle</span>
+                Request Custom Batch
+            </button>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer
+        class="bg-surface-light dark:bg-surface-dark border-t border-border-light dark:border-border-dark py-8 mt-auto">
+        <div
+            class="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 text-center text-text-secondary dark:text-text-secondary-dark text-sm">
+            <p>© 2024 AI-TECH PRO LMS. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Enrollment Modal -->
+    <div id="enrollmentModal"
+        class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
+        <div class="bg-surface-light dark:bg-surface-dark rounded-2xl shadow-2xl max-w-lg w-full p-6 border border-border-light dark:border-border-dark transform scale-95 opacity-0 transition-all duration-200"
+            id="modalContent">
+            <div class="flex justify-between items-start mb-6">
+                <div>
+                    <h3 class="text-2xl font-bold text-text-main dark:text-text-main-dark mb-1">Enroll in Hybrid Batch
+                    </h3>
+                    <p class="text-text-secondary dark:text-text-secondary-dark text-sm">Complete your enrollment
+                        details</p>
+                </div>
+                <button onclick="closeEnrollmentModal()"
+                    class="text-text-secondary dark:text-text-secondary-dark hover:text-text-main dark:hover:text-text-main-dark transition-colors">
+                    <span class="material-symbols-outlined">close</span>
+                </button>
+            </div>
+
+            <!-- Batch Info -->
+            <div class="bg-background-light dark:bg-background-dark rounded-lg p-4 mb-6">
+                <p class="text-xs text-text-secondary dark:text-text-secondary-dark mb-1">Selected Batch</p>
+                <h4 id="modal-batch-name" class="text-lg font-bold text-text-main dark:text-text-main-dark mb-2">Batch
+                    Name</h4>
+                <div class="grid grid-cols-2 gap-3 text-sm">
+                    <div class="flex items-center gap-2 text-text-secondary dark:text-text-secondary-dark">
+                        <span class="material-symbols-outlined text-[16px]">person</span>
+                        <span id="modal-instructor">Instructor</span>
+                    </div>
+                    <div class="flex items-center gap-2 text-text-secondary dark:text-text-secondary-dark">
+                        <span class="material-symbols-outlined text-[16px]">schedule</span>
+                        <span id="modal-schedule">Schedule</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Enrollment Form -->
+            <form id="enrollmentForm" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-semibold text-text-main dark:text-text-main-dark mb-1">Full Name
+                        *</label>
+                    <input type="text" id="enrollStudentName" required
+                        class="w-full px-4 py-2 bg-background-light dark:bg-background-dark border border-border-light dark:border-border-dark rounded-lg text-text-main dark:text-text-main-dark focus:border-primary focus:outline-none"
+                        placeholder="Enter your full name">
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold text-text-main dark:text-text-main-dark mb-1">Email
+                        Address *</label>
+                    <input type="email" id="enrollStudentEmail" required
+                        class="w-full px-4 py-2 bg-background-light dark:bg-background-dark border border-border-light dark:border-border-dark rounded-lg text-text-main dark:text-text-main-dark focus:border-primary focus:outline-none"
+                        placeholder="your.email@example.com">
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold text-text-main dark:text-text-main-dark mb-1">Phone Number
+                        *</label>
+                    <input type="tel" id="enrollStudentPhone" required
+                        class="w-full px-4 py-2 bg-background-light dark:bg-background-dark border border-border-light dark:border-border-dark rounded-lg text-text-main dark:text-text-main-dark focus:border-primary focus:outline-none"
+                        placeholder="+91 98765 43210">
+                </div>
+                <div class="flex gap-3 mt-6">
+                    <button type="button" onclick="closeEnrollmentModal()"
+                        class="flex-1 px-4 py-2.5 rounded-lg border border-border-light dark:border-border-dark text-text-main dark:text-text-main-dark font-semibold hover:bg-background-light dark:hover:bg-background-dark transition-colors">
+                        Cancel
+                    </button>
+                    <button type="submit"
+                        class="flex-1 px-4 py-2.5 rounded-lg bg-primary hover:bg-primary-hover text-white font-semibold transition-colors shadow-lg shadow-primary/20">
+                        Confirm Enrollment
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Custom Batch Request Modal -->
+    <div id="customBatchModal"
+        class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
+        <div
+            class="bg-surface-light dark:bg-surface-dark rounded-2xl shadow-2xl max-w-2xl w-full p-6 border border-border-light dark:border-border-dark max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between items-start mb-6">
+                <div>
+                    <h3 class="text-2xl font-bold text-text-main dark:text-text-main-dark mb-1">Request Custom Hybrid
+                        Batch</h3>
+                    <p class="text-text-secondary dark:text-text-secondary-dark text-sm">Tell us your preferences and
+                        we'll create a batch for you</p>
+                </div>
+                <button onclick="closeCustomBatchModal()"
+                    class="text-text-secondary dark:text-text-secondary-dark hover:text-text-main dark:hover:text-text-main-dark transition-colors">
+                    <span class="material-symbols-outlined">close</span>
+                </button>
+            </div>
+
+            <form id="customBatchForm" class="space-y-4">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-semibold text-text-main dark:text-text-main-dark mb-1">Full
+                            Name *</label>
+                        <input type="text" id="customStudentName" required
+                            class="w-full px-4 py-2 bg-background-light dark:bg-background-dark border border-border-light dark:border-border-dark rounded-lg text-text-main dark:text-text-main-dark focus:border-primary focus:outline-none"
+                            placeholder="Your name">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-text-main dark:text-text-main-dark mb-1">Email
+                            *</label>
+                        <input type="email" id="customStudentEmail" required
+                            class="w-full px-4 py-2 bg-background-light dark:bg-background-dark border border-border-light dark:border-border-dark rounded-lg text-text-main dark:text-text-main-dark focus:border-primary focus:outline-none"
+                            placeholder="your.email@example.com">
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-semibold text-text-main dark:text-text-main-dark mb-1">Phone
+                            *</label>
+                        <input type="tel" id="customStudentPhone" required
+                            class="w-full px-4 py-2 bg-background-light dark:bg-background-dark border border-border-light dark:border-border-dark rounded-lg text-text-main dark:text-text-main-dark focus:border-primary focus:outline-none"
+                            placeholder="+91 98765 43210">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-text-main dark:text-text-main-dark mb-1">Course
+                            Track *</label>
+                        <select id="customCourseTrack" required
+                            class="w-full px-4 py-2 bg-background-light dark:bg-background-dark border border-border-light dark:border-border-dark rounded-lg text-text-main dark:text-text-main-dark focus:border-primary focus:outline-none">
+                            <option value="">Select course</option>
+                            <option value="Java Full Stack">Java Full Stack</option>
+                            <option value="Python Full Stack">Python Full Stack</option>
+                            <option value="AI & Machine Learning">AI & Machine Learning</option>
+                            <option value="Cloud Computing">Cloud Computing</option>
+                            <option value="Networking">Networking</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label
+                            class="block text-sm font-semibold text-text-main dark:text-text-main-dark mb-1">Preferred
+                            Time *</label>
+                        <input type="text" id="customPreferredTime" required
+                            class="w-full px-4 py-2 bg-background-light dark:bg-background-dark border border-border-light dark:border-border-dark rounded-lg text-text-main dark:text-text-main-dark focus:border-primary focus:outline-none"
+                            placeholder="e.g., Weekday evenings">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-text-main dark:text-text-main-dark mb-1">Batch
+                            Size Preference</label>
+                        <select id="customBatchSize"
+                            class="w-full px-4 py-2 bg-background-light dark:bg-background-dark border border-border-light dark:border-border-dark rounded-lg text-text-main dark:text-text-main-dark focus:border-primary focus:outline-none">
+                            <option value="Small (5-10)">Small (5-10)</option>
+                            <option value="Medium (10-20)">Medium (10-20)</option>
+                            <option value="Large (20-30)">Large (20-30)</option>
+                        </select>
+                    </div>
+                </div>
+                <div>
+                    <label
+                        class="block text-sm font-semibold text-text-main dark:text-text-main-dark mb-1">Online/Offline
+                        Preference</label>
+                    <select id="customModePreference"
+                        class="w-full px-4 py-2 bg-background-light dark:bg-background-dark border border-border-light dark:border-border-dark rounded-lg text-text-main dark:text-text-main-dark focus:border-primary focus:outline-none">
+                        <option value="50/50">50% Online, 50% Offline</option>
+                        <option value="70/30">70% Online, 30% Offline</option>
+                        <option value="30/70">30% Online, 70% Offline</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold text-text-main dark:text-text-main-dark mb-1">Additional
+                        Notes</label>
+                    <textarea id="customAdditionalNotes" rows="3"
+                        class="w-full px-4 py-2 bg-background-light dark:bg-background-dark border border-border-light dark:border-border-dark rounded-lg text-text-main dark:text-text-main-dark focus:border-primary focus:outline-none"
+                        placeholder="Any specific requirements or preferences..."></textarea>
+                </div>
+                <div class="flex gap-3 mt-6">
+                    <button type="button" onclick="closeCustomBatchModal()"
+                        class="flex-1 px-4 py-2.5 rounded-lg border border-border-light dark:border-border-dark text-text-main dark:text-text-main-dark font-semibold hover:bg-background-light dark:hover:bg-background-dark transition-colors">
+                        Cancel
+                    </button>
+                    <button type="submit"
+                        class="flex-1 px-4 py-2.5 rounded-lg bg-primary hover:bg-primary-hover text-white font-semibold transition-colors shadow-lg shadow-primary/20">
+                        Submit Request
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Global variables
+        let allBatches = [];
+        let allCourses = [];
+        let currentViewMode = 'all';
+        let selectedBatch = null;
+
+        // Load data on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            loadHybridData();
+            setupEventListeners();
+        });
+
+        // Load hybrid configuration
+        async function loadHybridData() {
+            try {
+                const response = await fetch('http://127.0.0.1:8080/api/hybrid-config');
+                const result = await response.json();
+
+                if (result.success && result.data) {
+                    const data = result.data;
+
+                    // Update page info
+                    if (data.pageInfo) {
+                        document.getElementById('page-title').textContent = data.pageInfo.title || 'Hybrid Batch Schedule';
+                        document.getElementById('page-subtitle').textContent = data.pageInfo.subtitle || 'Best of both worlds';
+                    }
+
+                    // Update pricing banner
+                    if (data.accessFee) {
+                        const priceEl = document.getElementById('access-price');
+                        const periodEl = document.getElementById('access-period');
+                        if (priceEl && periodEl) {
+                            priceEl.textContent = `₹${(data.accessFee.price || 2800).toLocaleString('en-IN')}`;
+                            periodEl.textContent = `/${data.accessFee.period || 'month'}`;
+                        }
+                    }
+
+                    // Store courses and batches
+                    allCourses = data.courses || [];
+                    allBatches = data.batches || [];
+
+                    // Render individual pricing
+                    renderIndividualPricing(allCourses, data.individualCoursePricing);
+
+                    // Populate filters
+                    populateFilters();
+
+                    // Render batches
+                    renderBatches();
+                } else {
+                    showError('Failed to load batch data');
+                }
+            } catch (error) {
+                console.error('Error loading data:', error);
+                showError('Unable to connect to server');
+            }
+        }
+
+        // Render individual pricing cards
+        function renderIndividualPricing(courses, settings) {
+            const container = document.getElementById('individual-courses-grid');
+            const section = document.getElementById('individual-pricing-section');
+
+            if (!container || !section) return;
+
+            // Check if enabled (default to true if undefined)
+            if (settings && settings.enabled === false) {
+                section.style.display = 'none';
+                return;
+            }
+
+            if (!courses || courses.length === 0) {
+                section.style.display = 'none';
+                return;
+            }
+
+            section.style.display = 'block';
+
+            // Get unique courses by ID
+            const uniqueCourses = [];
+            const seenIds = new Set();
+            courses.forEach(c => {
+                if (!seenIds.has(c.id)) {
+                    seenIds.add(c.id);
+                    uniqueCourses.push(c);
+                }
+            });
+
+            container.innerHTML = uniqueCourses.map(course => `
+                <div class="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-lg bg-${course.color || 'blue'}-100 dark:bg-${course.color || 'blue'}-900 flex items-center justify-center text-${course.color || 'blue'}-600 dark:text-${course.color || 'blue'}-400">
+                            <span class="material-symbols-outlined text-[20px]">${course.icon || 'school'}</span>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-text-main dark:text-text-main-dark text-sm">${course.name}</h4>
+                            <p class="text-xs text-text-secondary dark:text-text-secondary-dark">${course.duration || '6 Months'}</p>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <p class="font-bold text-text-main dark:text-text-main-dark">₹${(course.price || course.fee || 0).toLocaleString('en-IN')}</p>
+                        <button onclick="window.location.href='HybridPricing.html'" class="text-xs text-primary hover:underline font-medium">Details</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Populate filter dropdowns
+        function populateFilters() {
+            const courseFilter = document.getElementById('course-filter');
+            const instructorFilter = document.getElementById('instructor-filter');
+
+            // Get unique courses
+            const uniqueCourses = [...new Set(allCourses.map(c => c.name))];
+            uniqueCourses.forEach(course => {
+                const option = document.createElement('option');
+                option.value = course;
+                option.textContent = course;
+                courseFilter.appendChild(option);
+            });
+
+            // Get unique instructors from batches
+            const uniqueInstructors = [...new Set(allBatches.map(b => b.faculty).filter(Boolean))];
+            uniqueInstructors.forEach(instructor => {
+                const option = document.createElement('option');
+                option.value = instructor;
+                option.textContent = instructor;
+                instructorFilter.appendChild(option);
+            });
+        }
+
+        // Set view mode
+        function setViewMode(mode) {
+            currentViewMode = mode;
+
+            // Update button styles
+            ['all', 'online', 'offline'].forEach(m => {
+                const btn = document.getElementById(`mode-${m}`);
+                if (m === mode) {
+                    btn.className = 'px-4 py-2 rounded-lg bg-primary text-white text-sm font-medium shadow-sm shadow-primary/30 transition-all';
+                } else {
+                    btn.className = 'px-4 py-2 rounded-lg bg-background-light dark:bg-background-dark text-text-secondary dark:text-text-secondary-dark hover:text-text-main dark:hover:text-text-main-dark text-sm font-medium border border-transparent hover:border-border-light dark:hover:border-border-dark transition-all';
+                }
+            });
+
+            renderBatches();
+        }
+
+        // Filter batches
+        function filterBatches() {
+            renderBatches();
+        }
+
+        // Render batches
+        function renderBatches() {
+            const grid = document.getElementById('batches-grid');
+            const searchTerm = document.getElementById('search-input').value.toLowerCase();
+            const courseFilter = document.getElementById('course-filter').value;
+            const instructorFilter = document.getElementById('instructor-filter').value;
+
+            // Filter batches
+            let filteredBatches = allBatches.filter(batch => {
+                // View mode filter
+                if (currentViewMode === 'online' && batch.mode !== 'Online') return false;
+                if (currentViewMode === 'offline' && batch.mode !== 'Offline') return false;
+
+                // Instructor filter
+                if (instructorFilter && batch.faculty !== instructorFilter) return false;
+
+                // Get course info
+                const course = allCourses.find(c => c.id === batch.courseId);
+                if (!course) return false;
+
+                // Course filter
+                if (courseFilter && course.name !== courseFilter) return false;
+
+                // Search filter
+                if (searchTerm) {
+                    const searchableText = `${course.name} ${batch.faculty} ${batch.mode}`.toLowerCase();
+                    if (!searchableText.includes(searchTerm)) return false;
+                }
+
+                return true;
+            });
+
+            if (filteredBatches.length === 0) {
+                grid.innerHTML = `
+                    <div class="col-span-full text-center py-12 text-text-secondary dark:text-text-secondary-dark">
+                        <span class="material-symbols-outlined text-4xl mb-4 block">search_off</span>
+                        <p>No batches found matching your criteria</p>
+                    </div>
+                `;
+                return;
+            }
+
+            // Render batch cards
+            grid.innerHTML = filteredBatches.map(batch => {
+                const course = allCourses.find(c => c.id === batch.courseId);
+                if (!course) return '';
+
+                const isOnline = batch.mode === 'Online';
+                const modeIcon = isOnline ? '📱' : '🏢';
+                const modeBadgeClass = isOnline ? 'mode-badge-online' : 'mode-badge-offline';
+                const modeText = isOnline ? 'Online' : 'Offline';
+                const location = isOnline ? (batch.platform || 'Zoom') : (batch.location || 'Campus');
+
+                return `
+                    <div class="group bg-surface-light dark:bg-surface-dark border border-border-light dark:border-border-dark rounded-xl overflow-hidden shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300 flex flex-col animate-slide-in">
+                        <!-- Course Image -->
+                        <div class="relative h-40 w-full bg-slate-200 overflow-hidden">
+                            <div class="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-105" 
+                                 style="background-image: url('${course.image || 'https://via.placeholder.com/400x200'}');"></div>
+                            <div class="absolute top-3 right-3 ${modeBadgeClass} px-3 py-1 rounded-full text-xs font-bold shadow-lg flex items-center gap-1">
+                                ${modeIcon} ${modeText}
+                            </div>
+                            <div class="absolute bottom-3 left-3 bg-white/90 dark:bg-black/80 backdrop-blur-sm px-2 py-1 rounded text-xs font-bold text-text-main dark:text-text-main-dark shadow-sm">
+                                ${batch.day} • ${batch.startTime}
+                            </div>
+                        </div>
+                        
+                        <!-- Content -->
+                        <div class="p-5 flex flex-col flex-grow">
+                            <div class="flex justify-between items-start mb-2">
+                                <div class="bg-primary/10 text-primary text-xs px-2 py-1 rounded font-semibold uppercase tracking-wide">
+                                    ${course.level || 'Intermediate'}
+                                </div>
+                                <div class="flex items-center gap-1 text-xs text-text-secondary dark:text-text-secondary-dark">
+                                    <span class="material-symbols-outlined" style="font-size: 14px;">person</span>
+                                    <span>${batch.faculty}</span>
+                                </div>
+                            </div>
+                            
+                            <h3 class="text-lg font-bold text-text-main dark:text-text-main-dark leading-tight mb-3 group-hover:text-primary transition-colors">
+                                ${course.name}
+                            </h3>
+                            
+                            <!-- Batch Details -->
+                            <div class="space-y-2 mb-4 flex-grow">
+                                <div class="flex items-center gap-2 text-sm text-text-secondary dark:text-text-secondary-dark">
+                                    <span class="material-symbols-outlined text-[16px]">schedule</span>
+                                    <span>${batch.startTime} - ${batch.endTime}</span>
+                                </div>
+                                <div class="flex items-center gap-2 text-sm text-text-secondary dark:text-text-secondary-dark">
+                                    <span class="material-symbols-outlined text-[16px]">${isOnline ? 'videocam' : 'location_on'}</span>
+                                    <span>${location}</span>
+                                </div>
+                                <div class="flex items-center gap-2 text-sm text-text-secondary dark:text-text-secondary-dark">
+                                    <span class="material-symbols-outlined text-[16px]">groups</span>
+                                    <span>${batch.enrolled || 0}/${batch.seats || 30} enrolled</span>
+                                </div>
+                            </div>
+                            
+                            <!-- Footer -->
+                            <div class="pt-4 border-t border-border-light dark:border-border-dark flex items-center justify-between mt-auto">
+                                <div>
+                                    <span class="text-xs text-text-secondary dark:text-text-secondary-dark block">Course Fee</span>
+                                    <span class="text-lg font-bold text-text-main dark:text-text-main-dark">₹${course.fee ? course.fee.toLocaleString() : 'N/A'}</span>
+                                </div>
+                                <button onclick='openEnrollmentModal(${JSON.stringify(batch).replace(/'/g, "\\'")})'
+                                    class="bg-primary hover:bg-primary-hover text-white px-5 py-2.5 rounded-lg text-sm font-medium transition-colors shadow-sm shadow-primary/30 flex items-center gap-2">
+                                    Enroll Now
+                                    <span class="material-symbols-outlined" style="font-size: 18px;">arrow_forward</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Open enrollment modal
+        function openEnrollmentModal(batch) {
+            selectedBatch = batch;
+            const course = allCourses.find(c => c.id === batch.courseId);
+
+            document.getElementById('modal-batch-name').textContent = course ? course.name : 'Batch';
+            document.getElementById('modal-instructor').textContent = batch.faculty;
+            document.getElementById('modal-schedule').textContent = `${batch.day}, ${batch.startTime} - ${batch.endTime}`;
+
+            const modal = document.getElementById('enrollmentModal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            setTimeout(() => {
+                document.getElementById('modalContent').classList.remove('scale-95', 'opacity-0');
+            }, 10);
+        }
+
+        // Close enrollment modal
+        function closeEnrollmentModal() {
+            const modal = document.getElementById('enrollmentModal');
+            document.getElementById('modalContent').classList.add('scale-95', 'opacity-0');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            }, 200);
+        }
+
+        // Open custom batch modal
+        function openCustomBatchModal() {
+            const modal = document.getElementById('customBatchModal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        // Close custom batch modal
+        function closeCustomBatchModal() {
+            const modal = document.getElementById('customBatchModal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        // Setup event listeners
+        function setupEventListeners() {
+            // Enrollment form submission
+            document.getElementById('enrollmentForm').addEventListener('submit', async (e) => {
+                e.preventDefault();
+
+                const studentName = document.getElementById('enrollStudentName').value.trim();
+                const email = document.getElementById('enrollStudentEmail').value.trim();
+                const phone = document.getElementById('enrollStudentPhone').value.trim();
+
+                if (!studentName || !email || !phone || !selectedBatch) {
+                    showToast('Please fill in all required fields', 'error');
+                    return;
+                }
+
+                const course = allCourses.find(c => c.id === selectedBatch.courseId);
+
+                try {
+                    const response = await fetch('http://127.0.0.1:8080/api/enrollments', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            type: 'hybrid',
+                            studentName,
+                            email,
+                            phone,
+                            course: course ? course.name : 'Unknown',
+                            batchDetails: {
+                                faculty: selectedBatch.faculty,
+                                day: selectedBatch.day,
+                                time: `${selectedBatch.startTime} - ${selectedBatch.endTime}`,
+                                mode: selectedBatch.mode,
+                                location: selectedBatch.location || selectedBatch.platform
+                            }
+                        })
+                    });
+
+                    const result = await response.json();
+
+                    if (result.success) {
+                        closeEnrollmentModal();
+                        showToast('Enrollment submitted! Pending admin approval.', 'success');
+                        document.getElementById('enrollmentForm').reset();
+                    } else {
+                        showToast('Failed to submit enrollment: ' + result.message, 'error');
+                    }
+                } catch (error) {
+                    console.error('Error submitting enrollment:', error);
+                    showToast('Failed to submit enrollment. Please ensure the backend server is running.', 'error');
+                }
+            });
+
+            // Custom batch form submission
+            document.getElementById('customBatchForm').addEventListener('submit', async (e) => {
+                e.preventDefault();
+
+                const formData = {
+                    type: 'hybrid',
+                    studentName: document.getElementById('customStudentName').value.trim(),
+                    email: document.getElementById('customStudentEmail').value.trim(),
+                    phone: document.getElementById('customStudentPhone').value.trim(),
+                    courseTrack: document.getElementById('customCourseTrack').value,
+                    preferredTime: document.getElementById('customPreferredTime').value.trim(),
+                    batchSize: document.getElementById('customBatchSize').value,
+                    modePreference: document.getElementById('customModePreference').value,
+                    additionalNotes: document.getElementById('customAdditionalNotes').value.trim()
+                };
+
+                try {
+                    const response = await fetch('http://127.0.0.1:8080/api/batch-requests', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(formData)
+                    });
+
+                    const result = await response.json();
+
+                    if (result.success) {
+                        closeCustomBatchModal();
+                        showToast('Custom batch request submitted! Admin will review your request.', 'success');
+                        document.getElementById('customBatchForm').reset();
+                    } else {
+                        showToast('Failed to submit request: ' + result.message, 'error');
+                    }
+                } catch (error) {
+                    console.error('Error sending request:', error);
+                    showToast('Failed to send request. Please make sure the backend server is running.', 'error');
+                }
+            });
+        }
+
+        // Show toast notification
+        function showToast(message, type = 'success') {
+            const toast = document.createElement('div');
+            toast.className = `fixed bottom-5 left-1/2 -translate-x-1/2 ${type === 'success' ? 'bg-green-600' : 'bg-red-600'} text-white px-6 py-3 rounded-lg shadow-xl flex items-center gap-2 z-50 animate-slide-in`;
+            toast.innerHTML = `
+                <span class="material-symbols-outlined">${type === 'success' ? 'check_circle' : 'error'}</span>
+                <span>${message}</span>
+            `;
+            document.body.appendChild(toast);
+            setTimeout(() => toast.remove(), 4000);
+        }
+
+        // Show error message
+        function showError(message) {
+            const grid = document.getElementById('batches-grid');
+            grid.innerHTML = `
+                <div class="col-span-full text-center py-12 text-red-500">
+                    <span class="material-symbols-outlined text-4xl mb-4 block">error</span>
+                    <p>${message}</p>
+                    <p class="text-sm mt-2">Run: <code class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded">cd backend && node server.js</code></p>
+                </div>
+            `;
+        }
+
+        // Auto-refresh data every 30 seconds
+        setInterval(() => {
+            loadHybridData();
+        }, 30000);
+
+        // Global State for Hybrid Calendar
+        let currentCalendarDate = new Date();
+
+        function renderCalendarHeader() {
+            const headerContainer = document.getElementById('calendar-grid-header');
+            const monthYearEl = document.getElementById('calendar-month-year');
+
+            if (!headerContainer) return;
+
+            const now = new Date();
+            const selectedDate = new Date(currentCalendarDate);
+            const currentDay = selectedDate.getDay();
+            const currentDayIndex = currentDay === 0 ? 6 : currentDay - 1;
+            const startOfWeek = new Date(selectedDate);
+            startOfWeek.setDate(selectedDate.getDate() - currentDayIndex);
+
+            if (monthYearEl) {
+                const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+                monthYearEl.textContent = `${monthNames[startOfWeek.getMonth()]} ${startOfWeek.getFullYear()}`;
+            }
+
+            const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+            let html = '';
+
+            for (let i = 0; i < 7; i++) {
+                const d = new Date(startOfWeek);
+                d.setDate(startOfWeek.getDate() + i);
+                const isToday = d.toDateString() === now.toDateString();
+                const wrapperClass = isToday
+                    ? "p-3 border-r border-border-light dark:border-border-dark text-center group cursor-pointer bg-primary/5 dark:bg-primary/10"
+                    : "p-3 border-r border-border-light dark:border-border-dark text-center group cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors";
+                const bgClass = (i >= 5 && !isToday) ? " bg-slate-50/50 dark:bg-slate-900/30" : "";
+                const textClass = isToday
+                    ? "text-xs font-medium text-primary mb-1"
+                    : "text-xs font-medium text-slate-500 dark:text-slate-400 mb-1";
+                const numberClass = isToday
+                    ? "size-8 flex items-center justify-center rounded-full bg-primary text-white text-sm font-bold shadow-md shadow-primary/30"
+                    : "size-8 flex items-center justify-center rounded-full text-sm font-bold text-slate-900 dark:text-white";
+                html += `
+                    <div class="${wrapperClass}${bgClass}">
+                        <p class="${textClass}">${days[i]}</p>
+                        <div class="flex justify-center">
+                            <span class="${numberClass}">${d.getDate()}</span>
+                        </div>
+                    </div>
+                `;
+            }
+            headerContainer.innerHTML = html;
+        }
+
+        // Initialize Calendar
+        document.addEventListener('DOMContentLoaded', () => {
+            renderCalendarHeader();
+
+            document.getElementById('btn-prev-week')?.addEventListener('click', () => {
+                currentCalendarDate.setDate(currentCalendarDate.getDate() - 7);
+                renderCalendarHeader();
+            });
+
+            document.getElementById('btn-next-week')?.addEventListener('click', () => {
+                currentCalendarDate.setDate(currentCalendarDate.getDate() + 7);
+                renderCalendarHeader();
+            });
+
+            document.getElementById('btn-today')?.addEventListener('click', () => {
+                currentCalendarDate = new Date();
+                renderCalendarHeader();
+            });
+        });
+    </script>
+</body>
+
+</html>

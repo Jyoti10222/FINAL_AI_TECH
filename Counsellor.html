@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Schedule Your Counseling Session - AI-TECH PRO</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+        rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#4F46E5',
+                        'primary-hover': '#4338CA',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+
+        .step-indicator {
+            transition: all 0.3s ease;
+        }
+
+        .step-active {
+            background: #4F46E5;
+            color: white;
+        }
+
+        .step-completed {
+            background: #10B981;
+            color: white;
+        }
+
+        .calendar-day {
+            transition: all 0.2s ease;
+        }
+
+        .calendar-day:hover:not(.disabled) {
+            background: #EEF2FF;
+            transform: scale(1.05);
+        }
+
+        .calendar-day.selected {
+            background: #4F46E5;
+            color: white;
+        }
+
+        .time-slot {
+            transition: all 0.2s ease;
+        }
+
+        .time-slot:hover:not(.disabled) {
+            background: #EEF2FF;
+            border-color: #4F46E5;
+        }
+
+        .time-slot.selected {
+            background: #4F46E5;
+            color: white;
+            border-color: #4F46E5;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-50 font-sans">
+    <!-- Header -->
+    <header class="bg-white border-b border-gray-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-primary rounded-lg flex items-center justify-center">
+                        <span class="material-symbols-outlined text-white">school</span>
+                    </div>
+                    <div>
+                        <h1 class="text-xl font-bold text-gray-900">AI-TECH PRO</h1>
+                        <p class="text-xs text-gray-500">Career Counseling</p>
+                    </div>
+                </div>
+                <nav class="hidden md:flex items-center gap-6 mr-6">
+                    <a href="A5Dashboard.html"
+                        class="text-sm font-medium text-gray-500 hover:text-primary transition-colors">Dashboard</a>
+                    <a href="A6Catlog.html"
+                        class="text-sm font-medium text-gray-500 hover:text-primary transition-colors">All Courses</a>
+                </nav>
+                <button onclick="location.href='A5Dashboard.html'"
+                    class="text-gray-600 hover:text-gray-900 flex items-center gap-2">
+                    <span class="material-symbols-outlined">arrow_back</span>
+                    <span class="hidden sm:inline">Back to Dashboard</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- Progress Indicator -->
+        <div id="progress-bar" class="mb-8">
+            <div class="flex items-center justify-center gap-2">
+                <div class="flex items-center">
+                    <div id="step-1-indicator"
+                        class="step-indicator step-active w-10 h-10 rounded-full flex items-center justify-center font-semibold">
+                        1</div>
+                    <span class="ml-2 text-sm font-medium text-gray-700">Date & Time</span>
+                </div>
+                <div class="w-16 h-0.5 bg-gray-300"></div>
+                <div class="flex items-center">
+                    <div id="step-2-indicator"
+                        class="step-indicator bg-gray-200 text-gray-600 w-10 h-10 rounded-full flex items-center justify-center font-semibold">
+                        2</div>
+                    <span class="ml-2 text-sm font-medium text-gray-500">Mode & Details</span>
+                </div>
+                <div class="w-16 h-0.5 bg-gray-300"></div>
+                <div class="flex items-center">
+                    <div id="step-3-indicator"
+                        class="step-indicator bg-gray-200 text-gray-600 w-10 h-10 rounded-full flex items-center justify-center font-semibold">
+                        3</div>
+                    <span class="ml-2 text-sm font-medium text-gray-500">Confirmation</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 1: Date & Time Selection -->
+        <div id="step-1" class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- Left Panel: Info -->
+            <div class="lg:col-span-1">
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 sticky top-8">
+                    <div class="text-center mb-6">
+                        <div
+                            class="w-20 h-20 bg-gradient-to-br from-primary to-indigo-600 rounded-full mx-auto mb-4 flex items-center justify-center">
+                            <span class="material-symbols-outlined text-white text-4xl">person</span>
+                        </div>
+                        <h2 class="text-2xl font-bold text-gray-900 mb-2">Schedule Your Counseling Session</h2>
+                        <p class="text-gray-600 text-sm">Get expert guidance on courses, careers, and placements</p>
+                    </div>
+
+                    <div class="space-y-4">
+                        <div class="flex items-start gap-3">
+                            <div class="w-8 h-8 bg-indigo-50 rounded-lg flex items-center justify-center flex-shrink-0">
+                                <span class="material-symbols-outlined text-primary text-sm">schedule</span>
+                            </div>
+                            <div>
+                                <h3 class="font-semibold text-gray-900 text-sm">Duration</h3>
+                                <p class="text-gray-600 text-sm">30 minutes</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start gap-3">
+                            <div class="w-8 h-8 bg-indigo-50 rounded-lg flex items-center justify-center flex-shrink-0">
+                                <span class="material-symbols-outlined text-primary text-sm">videocam</span>
+                            </div>
+                            <div>
+                                <h3 class="font-semibold text-gray-900 text-sm">Meeting Options</h3>
+                                <p class="text-gray-600 text-sm">Online or Face-to-Face</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start gap-3">
+                            <div class="w-8 h-8 bg-indigo-50 rounded-lg flex items-center justify-center flex-shrink-0">
+                                <span class="material-symbols-outlined text-primary text-sm">support_agent</span>
+                            </div>
+                            <div>
+                                <h3 class="font-semibold text-gray-900 text-sm">Expert Counselors</h3>
+                                <p class="text-gray-600 text-sm">Assigned based on your needs</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Panel: Scheduler -->
+            <div class="lg:col-span-2">
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-6">
+                    <h3 class="text-xl font-bold text-gray-900 mb-6">Select Date & Time</h3>
+
+                    <!-- Calendar -->
+                    <div class="mb-6">
+                        <div class="flex items-center justify-between mb-4">
+                            <button id="prev-month" class="p-2 hover:bg-gray-100 rounded-lg transition">
+                                <span class="material-symbols-outlined">chevron_left</span>
+                            </button>
+                            <h4 id="current-month" class="text-lg font-semibold text-gray-900"></h4>
+                            <button id="next-month" class="p-2 hover:bg-gray-100 rounded-lg transition">
+                                <span class="material-symbols-outlined">chevron_right</span>
+                            </button>
+                        </div>
+
+                        <div class="grid grid-cols-7 gap-2 mb-2">
+                            <div class="text-center text-xs font-semibold text-gray-500 py-2">Sun</div>
+                            <div class="text-center text-xs font-semibold text-gray-500 py-2">Mon</div>
+                            <div class="text-center text-xs font-semibold text-gray-500 py-2">Tue</div>
+                            <div class="text-center text-xs font-semibold text-gray-500 py-2">Wed</div>
+                            <div class="text-center text-xs font-semibold text-gray-500 py-2">Thu</div>
+                            <div class="text-center text-xs font-semibold text-gray-500 py-2">Fri</div>
+                            <div class="text-center text-xs font-semibold text-gray-500 py-2">Sat</div>
+                        </div>
+
+                        <div id="calendar-grid" class="grid grid-cols-7 gap-2">
+                            <!-- Calendar days will be generated here -->
+                        </div>
+                    </div>
+
+                    <!-- Time Slots -->
+                    <div id="time-slots-container" class="hidden">
+                        <h4 class="text-lg font-semibold text-gray-900 mb-4">Available Time Slots</h4>
+                        <div id="time-slots-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+                            <!-- Time slots will be generated here -->
+                        </div>
+                    </div>
+
+                    <div class="mt-6 flex justify-end">
+                        <button id="next-to-step-2" disabled
+                            class="px-6 py-3 bg-primary hover:bg-primary-hover text-white rounded-lg font-semibold transition disabled:opacity-50 disabled:cursor-not-allowed">
+                            Continue
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 2: Mode & Details -->
+        <div id="step-2" class="hidden">
+            <div class="max-w-3xl mx-auto">
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-8">
+                    <h3 class="text-2xl font-bold text-gray-900 mb-6">Your Details</h3>
+
+                    <!-- Selected Date/Time Display -->
+                    <div class="bg-indigo-50 rounded-lg p-4 mb-6">
+                        <div class="flex items-center gap-3">
+                            <span class="material-symbols-outlined text-primary">event</span>
+                            <div>
+                                <p class="text-sm text-gray-600">Selected Slot</p>
+                                <p id="selected-datetime" class="font-semibold text-gray-900"></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Meeting Mode Selection -->
+                    <div class="mb-6">
+                        <label class="block text-sm font-semibold text-gray-900 mb-3">Meeting Mode</label>
+                        <div class="grid grid-cols-2 gap-4">
+                            <label class="relative cursor-pointer">
+                                <input type="radio" name="mode" value="online" class="peer sr-only" checked>
+                                <div
+                                    class="border-2 border-gray-200 rounded-xl p-4 peer-checked:border-primary peer-checked:bg-indigo-50 transition">
+                                    <div class="flex items-center gap-3">
+                                        <span class="material-symbols-outlined text-primary">videocam</span>
+                                        <div>
+                                            <p class="font-semibold text-gray-900">Online</p>
+                                            <p class="text-xs text-gray-600">Google Meet / Zoom</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </label>
+
+                            <label class="relative cursor-pointer">
+                                <input type="radio" name="mode" value="face-to-face" class="peer sr-only">
+                                <div
+                                    class="border-2 border-gray-200 rounded-xl p-4 peer-checked:border-primary peer-checked:bg-indigo-50 transition">
+                                    <div class="flex items-center gap-3">
+                                        <span class="material-symbols-outlined text-primary">location_on</span>
+                                        <div>
+                                            <p class="font-semibold text-gray-900">Face-to-Face</p>
+                                            <p class="text-xs text-gray-600">Institute Visit</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- User Details Form -->
+                    <form id="booking-form" class="space-y-4">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-900 mb-2">Full Name *</label>
+                                <input type="text" id="full-name" required
+                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition"
+                                    placeholder="John Doe">
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-900 mb-2">Email Address *</label>
+                                <input type="email" id="email" required
+                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition"
+                                    placeholder="john@example.com">
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-900 mb-2">Phone Number *</label>
+                                <input type="tel" id="phone" required
+                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition"
+                                    placeholder="+91 98765 43210">
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-900 mb-2">Course Interested In
+                                    *</label>
+                                <select id="course" required
+                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition">
+                                    <option value="">Select a course...</option>
+                                    <option value="AI & Machine Learning">AI & Machine Learning</option>
+                                    <option value="Data Science">Data Science</option>
+                                    <option value="Full Stack Development">Full Stack Development</option>
+                                    <option value="Cloud Computing">Cloud Computing</option>
+                                    <option value="Cybersecurity">Cybersecurity</option>
+                                    <option value="DevOps">DevOps</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-900 mb-2">Notes / Questions
+                                (Optional)</label>
+                            <textarea id="notes" rows="4"
+                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition resize-none"
+                                placeholder="Any specific topics you'd like to discuss..."></textarea>
+                        </div>
+
+                        <div class="flex gap-3 pt-4">
+                            <button type="button" id="back-to-step-1"
+                                class="flex-1 px-6 py-3 border-2 border-gray-300 text-gray-700 rounded-lg font-semibold hover:bg-gray-50 transition">
+                                Back
+                            </button>
+                            <button type="submit"
+                                class="flex-1 px-6 py-3 bg-primary hover:bg-primary-hover text-white rounded-lg font-semibold transition">
+                                Confirm Booking
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 3: Confirmation -->
+        <div id="step-3" class="hidden">
+            <div class="max-w-2xl mx-auto">
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-8 text-center">
+                    <div class="w-20 h-20 bg-green-100 rounded-full mx-auto mb-6 flex items-center justify-center">
+                        <span class="material-symbols-outlined text-green-600 text-5xl">check_circle</span>
+                    </div>
+
+                    <h2 class="text-3xl font-bold text-gray-900 mb-3">Booking Confirmed!</h2>
+                    <p class="text-gray-600 mb-8">Your counseling session has been successfully scheduled</p>
+
+                    <!-- Booking Summary -->
+                    <div class="bg-gray-50 rounded-xl p-6 mb-6 text-left">
+                        <h3 class="font-semibold text-gray-900 mb-4">Session Details</h3>
+                        <div class="space-y-3">
+                            <div class="flex items-start gap-3">
+                                <span class="material-symbols-outlined text-primary">event</span>
+                                <div>
+                                    <p class="text-sm text-gray-600">Date & Time</p>
+                                    <p id="confirm-datetime" class="font-semibold text-gray-900"></p>
+                                </div>
+                            </div>
+
+                            <div class="flex items-start gap-3">
+                                <span class="material-symbols-outlined text-primary">videocam</span>
+                                <div>
+                                    <p class="text-sm text-gray-600">Meeting Mode</p>
+                                    <p id="confirm-mode" class="font-semibold text-gray-900"></p>
+                                </div>
+                            </div>
+
+                            <div class="flex items-start gap-3">
+                                <span class="material-symbols-outlined text-primary">school</span>
+                                <div>
+                                    <p class="text-sm text-gray-600">Course</p>
+                                    <p id="confirm-course" class="font-semibold text-gray-900"></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+                        <p class="text-sm text-blue-900">
+                            <span class="material-symbols-outlined text-sm align-middle">info</span>
+                            You will receive an email confirmation once a counselor is assigned to your session.
+                        </p>
+                    </div>
+
+                    <button onclick="location.href='A4Onboarding.html'"
+                        class="px-6 py-3 bg-primary hover:bg-primary-hover text-white rounded-lg font-semibold transition">
+                        Back to Dashboard
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Global state
+        let currentStep = 1;
+        let selectedDate = null;
+        let selectedTime = null;
+        let currentMonth = new Date();
+
+        // Available time slots (9 AM to 5 PM)
+        const timeSlots = [
+            '09:00 AM', '09:30 AM', '10:00 AM', '10:30 AM', '11:00 AM', '11:30 AM',
+            '12:00 PM', '12:30 PM', '01:00 PM', '01:30 PM', '02:00 PM', '02:30 PM',
+            '03:00 PM', '03:30 PM', '04:00 PM', '04:30 PM', '05:00 PM'
+        ];
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            renderCalendar();
+            setupEventListeners();
+        });
+
+        function setupEventListeners() {
+            document.getElementById('prev-month').addEventListener('click', () => {
+                currentMonth.setMonth(currentMonth.getMonth() - 1);
+                renderCalendar();
+            });
+
+            document.getElementById('next-month').addEventListener('click', () => {
+                currentMonth.setMonth(currentMonth.getMonth() + 1);
+                renderCalendar();
+            });
+
+            document.getElementById('next-to-step-2').addEventListener('click', () => {
+                if (selectedDate && selectedTime) {
+                    goToStep(2);
+                    updateSelectedDateTime();
+                }
+            });
+
+            document.getElementById('back-to-step-1').addEventListener('click', () => {
+                goToStep(1);
+            });
+
+            document.getElementById('booking-form').addEventListener('submit', async (e) => {
+                e.preventDefault();
+                await submitBooking();
+            });
+        }
+
+        function renderCalendar() {
+            const year = currentMonth.getFullYear();
+            const month = currentMonth.getMonth();
+
+            // Update month display
+            const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
+                'July', 'August', 'September', 'October', 'November', 'December'];
+            document.getElementById('current-month').textContent = `${monthNames[month]} ${year}`;
+
+            // Get first day and days in month
+            const firstDay = new Date(year, month, 1).getDay();
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+            const grid = document.getElementById('calendar-grid');
+            grid.innerHTML = '';
+
+            // Add empty cells for days before month starts
+            for (let i = 0; i < firstDay; i++) {
+                const emptyCell = document.createElement('div');
+                grid.appendChild(emptyCell);
+            }
+
+            // Add days
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+
+            for (let day = 1; day <= daysInMonth; day++) {
+                const date = new Date(year, month, day);
+                const dayCell = document.createElement('button');
+                dayCell.type = 'button';
+                dayCell.className = 'calendar-day aspect-square rounded-lg border border-gray-200 hover:border-primary flex items-center justify-center font-medium transition';
+                dayCell.textContent = day;
+
+                // Disable past dates and weekends
+                if (date < today || date.getDay() === 0 || date.getDay() === 6) {
+                    dayCell.className += ' disabled bg-gray-100 text-gray-400 cursor-not-allowed';
+                    dayCell.disabled = true;
+                } else {
+                    dayCell.className += ' text-gray-900 hover:bg-indigo-50';
+                    dayCell.addEventListener('click', () => selectDate(date, dayCell));
+                }
+
+                grid.appendChild(dayCell);
+            }
+        }
+
+        function selectDate(date, element) {
+            // Remove previous selection
+            document.querySelectorAll('.calendar-day.selected').forEach(el => {
+                el.classList.remove('selected');
+            });
+
+            // Add new selection
+            element.classList.add('selected');
+            selectedDate = date;
+
+            // Show time slots
+            renderTimeSlots();
+        }
+
+        function renderTimeSlots() {
+            const container = document.getElementById('time-slots-container');
+            const grid = document.getElementById('time-slots-grid');
+
+            container.classList.remove('hidden');
+            grid.innerHTML = '';
+
+            timeSlots.forEach(time => {
+                const slot = document.createElement('button');
+                slot.type = 'button';
+                slot.className = 'time-slot px-4 py-3 border-2 border-gray-200 rounded-lg text-sm font-medium text-gray-900 hover:border-primary';
+                slot.textContent = time;
+                slot.addEventListener('click', () => selectTime(time, slot));
+                grid.appendChild(slot);
+            });
+        }
+
+        function selectTime(time, element) {
+            // Remove previous selection
+            document.querySelectorAll('.time-slot.selected').forEach(el => {
+                el.classList.remove('selected');
+            });
+
+            // Add new selection
+            element.classList.add('selected');
+            selectedTime = time;
+
+            // Enable continue button
+            document.getElementById('next-to-step-2').disabled = false;
+        }
+
+        function updateSelectedDateTime() {
+            const dateStr = selectedDate.toLocaleDateString('en-US', {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+            const fullDateTime = `${dateStr} at ${selectedTime}`;
+            document.getElementById('selected-datetime').textContent = fullDateTime;
+        }
+
+        function goToStep(step) {
+            // Hide all steps
+            document.getElementById('step-1').classList.add('hidden');
+            document.getElementById('step-2').classList.add('hidden');
+            document.getElementById('step-3').classList.add('hidden');
+
+            // Show current step
+            document.getElementById(`step-${step}`).classList.remove('hidden');
+
+            // Update progress indicators
+            for (let i = 1; i <= 3; i++) {
+                const indicator = document.getElementById(`step-${i}-indicator`);
+                if (i < step) {
+                    indicator.className = 'step-indicator step-completed w-10 h-10 rounded-full flex items-center justify-center font-semibold';
+                    indicator.innerHTML = '<span class="material-symbols-outlined">check</span>';
+                } else if (i === step) {
+                    indicator.className = 'step-indicator step-active w-10 h-10 rounded-full flex items-center justify-center font-semibold';
+                    indicator.textContent = i;
+                } else {
+                    indicator.className = 'step-indicator bg-gray-200 text-gray-600 w-10 h-10 rounded-full flex items-center justify-center font-semibold';
+                    indicator.textContent = i;
+                }
+            }
+
+            currentStep = step;
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        async function submitBooking() {
+            const mode = document.querySelector('input[name="mode"]:checked').value;
+            const formData = {
+                name: document.getElementById('full-name').value,
+                email: document.getElementById('email').value,
+                phone: document.getElementById('phone').value,
+                course: document.getElementById('course').value,
+                notes: document.getElementById('notes').value,
+                selectedDate: selectedDate.toISOString(),
+                selectedTime: selectedTime,
+                mode: mode,
+                submittedAt: new Date().toISOString(),
+                status: 'pending'
+            };
+
+            try {
+                const response = await fetch('http://127.0.0.1:8080/api/counsellor-bookings', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(formData)
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    // Update confirmation screen
+                    const dateStr = selectedDate.toLocaleDateString('en-US', {
+                        weekday: 'long',
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric'
+                    });
+                    document.getElementById('confirm-datetime').textContent = `${dateStr} at ${selectedTime}`;
+                    document.getElementById('confirm-mode').textContent = mode === 'online' ? 'Online (Google Meet/Zoom)' : 'Face-to-Face (Institute Visit)';
+                    document.getElementById('confirm-course').textContent = formData.course;
+
+                    goToStep(3);
+                } else {
+                    alert('Failed to book session. Please try again.');
+                }
+            } catch (error) {
+                console.error('Error submitting booking:', error);
+                alert('Unable to submit booking. Please check your connection and try again.');
+            }
+        }
+    </script>
+</body>
+
+</html>

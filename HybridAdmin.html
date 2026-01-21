@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hybrid Admin Dashboard - AI-TECH PRO LMS</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+        rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#137fec',
+                        'primary-hover': '#0f6bd0',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+
+        .material-symbols-outlined.filled {
+            font-variation-settings: 'FILL' 1;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+    </style>
+</head>
+
+<body class="bg-slate-950 font-sans">
+    <!-- Header -->
+    <header class="bg-slate-900 border-b border-slate-700 sticky top-0 z-50 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center gap-3">
+                    <span class="material-symbols-outlined filled text-primary text-3xl">admin_panel_settings</span>
+                    <div>
+                        <h1 class="text-xl font-bold text-white">Hybrid Admin Dashboard</h1>
+                        <p class="text-xs text-slate-400">Manage hybrid batches and enrollments</p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-4">
+                    <a href="Hybrid.html" target="_blank"
+                        class="flex items-center gap-2 px-4 py-2 text-sm font-medium text-primary hover:bg-blue-50 rounded-lg transition-colors">
+                        <span class="material-symbols-outlined text-[20px]">open_in_new</span>
+                        View User Page
+                    </a>
+                    <button onclick="refreshAllData()"
+                        class="flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-lg transition-colors">
+                        <span class="material-symbols-outlined text-[20px]">refresh</span>
+                        Refresh
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- Stats Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+            <div class="bg-slate-900 rounded-xl shadow-sm p-6 border border-slate-800">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm font-medium text-slate-400">Total Batches</p>
+                        <p id="stat-batches" class="text-3xl font-bold text-white mt-1">0</p>
+                    </div>
+                    <div class="bg-blue-100 p-3 rounded-lg">
+                        <span class="material-symbols-outlined text-blue-600">calendar_month</span>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-slate-900 rounded-xl shadow-sm p-6 border border-slate-800">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm font-medium text-slate-400">Total Courses</p>
+                        <p id="stat-courses" class="text-3xl font-bold text-white mt-1">0</p>
+                    </div>
+                    <div class="bg-green-100 p-3 rounded-lg">
+                        <span class="material-symbols-outlined text-green-600">school</span>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-slate-900 rounded-xl shadow-sm p-6 border border-slate-800">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm font-medium text-slate-400">Pending Enrollments</p>
+                        <p id="stat-pending" class="text-3xl font-bold text-white mt-1">0</p>
+                    </div>
+                    <div class="bg-yellow-100 p-3 rounded-lg">
+                        <span class="material-symbols-outlined text-yellow-600">pending</span>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-slate-900 rounded-xl shadow-sm p-6 border border-slate-800">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm font-medium text-slate-400">Total Enrolled</p>
+                        <p id="stat-enrolled" class="text-3xl font-bold text-white mt-1">0</p>
+                    </div>
+                    <div class="bg-purple-100 p-3 rounded-lg">
+                        <span class="material-symbols-outlined text-purple-600">groups</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tabs -->
+        <div class="bg-slate-900 rounded-xl shadow-sm border border-slate-800 overflow-hidden">
+            <div class="border-b border-slate-700">
+                <nav class="flex -mb-px">
+                    <button onclick="switchTab('batches')" id="tab-batches"
+                        class="tab-button flex-1 py-4 px-6 text-center border-b-2 border-primary font-medium text-sm text-primary transition-colors">
+                        <span class="material-symbols-outlined text-[20px] align-middle mr-2">calendar_month</span>
+                        Batches
+                    </button>
+                    <button onclick="switchTab('courses')" id="tab-courses"
+                        class="tab-button flex-1 py-4 px-6 text-center border-b-2 border-transparent font-medium text-sm text-slate-400 hover:text-white hover:border-slate-600 transition-colors">
+                        <span class="material-symbols-outlined text-[20px] align-middle mr-2">school</span>
+                        Courses
+                    </button>
+                    <button onclick="switchTab('enrollments')" id="tab-enrollments"
+                        class="tab-button flex-1 py-4 px-6 text-center border-b-2 border-transparent font-medium text-sm text-slate-400 hover:text-white hover:border-slate-600 transition-colors">
+                        <span class="material-symbols-outlined text-[20px] align-middle mr-2">how_to_reg</span>
+                        Enrollments
+                    </button>
+                    <button onclick="switchTab('settings')" id="tab-settings"
+                        class="tab-button flex-1 py-4 px-6 text-center border-b-2 border-transparent font-medium text-sm text-slate-400 hover:text-white hover:border-slate-600 transition-colors">
+                        <span class="material-symbols-outlined text-[20px] align-middle mr-2">settings</span>
+                        Settings
+                    </button>
+                </nav>
+            </div>
+
+            <!-- Tab Contents -->
+            <div class="p-6">
+                <!-- Batches Tab -->
+                <div id="content-batches" class="tab-content active">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-xl font-bold text-white">Batch Management</h2>
+                        <button onclick="openAddBatchModal()"
+                            class="flex items-center gap-2 px-4 py-2 bg-primary hover:bg-primary-hover text-white rounded-lg font-medium transition-colors shadow-sm">
+                            <span class="material-symbols-outlined text-[20px]">add</span>
+                            Add Batch
+                        </button>
+                    </div>
+                    <div id="batches-list" class="space-y-4">
+                        <p class="text-slate-400 text-center py-8">Loading batches...</p>
+                    </div>
+                </div>
+
+                <!-- Courses Tab -->
+                <div id="content-courses" class="tab-content">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-xl font-bold text-white">Course Management</h2>
+                        <button onclick="openAddCourseModal()"
+                            class="flex items-center gap-2 px-4 py-2 bg-primary hover:bg-primary-hover text-white rounded-lg font-medium transition-colors shadow-sm">
+                            <span class="material-symbols-outlined text-[20px]">add</span>
+                            Add Course
+                        </button>
+                    </div>
+                    <div id="courses-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <p class="text-slate-400 text-center py-8 col-span-full">Loading courses...</p>
+                    </div>
+                </div>
+
+                <!-- Enrollments Tab -->
+                <div id="content-enrollments" class="tab-content">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-xl font-bold text-white">Student Enrollments</h2>
+                        <select id="enrollment-filter" onchange="filterEnrollments()"
+                            class="px-4 py-2 border border-slate-600 rounded-lg text-sm focus:ring-2 focus:ring-primary focus:border-primary">
+                            <option value="all">All Status</option>
+                            <option value="Pending" selected>Pending</option>
+                            <option value="Approved">Approved</option>
+                            <option value="Rejected">Rejected</option>
+                        </select>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-slate-950">
+                                <tr>
+                                    <th
+                                        class="px-6 py-3 text-left text-xs font-medium text-slate-400 uppercase tracking-wider">
+                                        Student</th>
+                                    <th
+                                        class="px-6 py-3 text-left text-xs font-medium text-slate-400 uppercase tracking-wider">
+                                        Contact</th>
+                                    <th
+                                        class="px-6 py-3 text-left text-xs font-medium text-slate-400 uppercase tracking-wider">
+                                        Course/Batch</th>
+                                    <th
+                                        class="px-6 py-3 text-left text-xs font-medium text-slate-400 uppercase tracking-wider">
+                                        Enrolled At</th>
+                                    <th
+                                        class="px-6 py-3 text-left text-xs font-medium text-slate-400 uppercase tracking-wider">
+                                        Status</th>
+                                    <th
+                                        class="px-6 py-3 text-left text-xs font-medium text-slate-400 uppercase tracking-wider">
+                                        Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="enrollments-table" class="bg-slate-900 divide-y divide-gray-200">
+                                <tr>
+                                    <td colspan="6" class="px-6 py-8 text-center text-slate-400">Loading enrollments...
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Settings Tab -->
+                <div id="content-settings" class="tab-content">
+                    <h2 class="text-xl font-bold text-white mb-6">Page Settings</h2>
+                    <form id="settings-form" class="space-y-6 max-w-2xl">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Page Title</label>
+                            <input type="text" id="setting-title"
+                                class="w-full px-4 py-2 border border-slate-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary"
+                                placeholder="Hybrid Batch Schedule">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Page Subtitle</label>
+                            <textarea id="setting-subtitle" rows="2"
+                                class="w-full px-4 py-2 border border-slate-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary"
+                                placeholder="Best of both worlds..."></textarea>
+                        </div>
+
+                        <!-- Pricing Section -->
+                        <div class="border-t pt-6">
+                            <h3 class="text-lg font-semibold text-white mb-4">Pricing Settings</h3>
+
+                            <!-- Pricing Tiers -->
+                            <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
+                                <h4 class="font-semibold text-white mb-3 text-slate-900">Subscription Plans</h4>
+                                <div class="grid grid-cols-3 gap-4">
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-2">Basic Plan
+                                            (₹)</label>
+                                        <input type="number" id="setting-price-basic"
+                                            class="w-full px-4 py-2 border border-slate-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary"
+                                            placeholder="1999">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-2">Standard Plan
+                                            (₹)</label>
+                                        <input type="number" id="setting-price-standard"
+                                            class="w-full px-4 py-2 border border-slate-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary"
+                                            placeholder="4999">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-2">Premium Plan
+                                            (₹)</label>
+                                        <input type="number" id="setting-price-premium"
+                                            class="w-full px-4 py-2 border border-slate-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary"
+                                            placeholder="9999">
+                                    </div>
+                                </div>
+                                <div class="mt-3 text-xs text-slate-500">
+                                    All plans are monthly. Quarterly/Yearly are calculated automatically on the user
+                                    page.
+                                </div>
+                            </div>
+
+                            <!-- Individual Course Pricing -->
+                            <div class="bg-slate-950 border border-slate-700 rounded-lg p-4">
+                                <div class="flex items-center justify-between mb-3">
+                                    <h4 class="font-semibold text-white">Individual Course Pricing</h4>
+                                    <label class="relative inline-flex items-center cursor-pointer">
+                                        <input type="checkbox" id="setting-individual-enabled" class="sr-only peer"
+                                            checked>
+                                        <div
+                                            class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-slate-900 after:border-slate-600 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary">
+                                        </div>
+                                    </label>
+                                </div>
+                                <p class="text-sm text-slate-400">Enable students to purchase individual courses instead
+                                    of the all-access pass. Course prices are set in the Courses tab.</p>
+                            </div>
+                        </div>
+
+                        <button type="submit"
+                            class="px-6 py-2.5 bg-primary hover:bg-primary-hover text-white rounded-lg font-medium transition-colors shadow-sm">
+                            Save Settings
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Add Batch Modal -->
+    <div id="addBatchModal"
+        class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
+        <div class="bg-slate-900 rounded-2xl shadow-2xl max-w-2xl w-full p-6 max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-2xl font-bold text-white">Add New Batch</h3>
+                <button onclick="closeAddBatchModal()" class="text-gray-400 hover:text-slate-400">
+                    <span class="material-symbols-outlined">close</span>
+                </button>
+            </div>
+            <form id="addBatchForm" class="space-y-4">
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Course *</label>
+                        <select id="batch-course" required
+                            class="w-full px-4 py-2 border border-slate-600 rounded-lg focus:ring-2 focus:ring-primary">
+                            <option value="">Select course</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Faculty *</label>
+                        <input type="text" id="batch-faculty" required
+                            class="w-full px-4 py-2 border border-slate-600 rounded-lg focus:ring-2 focus:ring-primary"
+                            placeholder="Prof. Name">
+                    </div>
+                </div>
+                <div class="grid grid-cols-3 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Day *</label>
+                        <select id="batch-day" required
+                            class="w-full px-4 py-2 border border-slate-600 rounded-lg focus:ring-2 focus:ring-primary">
+                            <option value="Mon">Monday</option>
+                            <option value="Tue">Tuesday</option>
+                            <option value="Wed">Wednesday</option>
+                            <option value="Thu">Thursday</option>
+                            <option value="Fri">Friday</option>
+                            <option value="Sat">Saturday</option>
+                            <option value="Sun">Sunday</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Start Time *</label>
+                        <input type="time" id="batch-start" required
+                            class="w-full px-4 py-2 border border-slate-600 rounded-lg focus:ring-2 focus:ring-primary">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">End Time *</label>
+                        <input type="time" id="batch-end" required
+                            class="w-full px-4 py-2 border border-slate-600 rounded-lg focus:ring-2 focus:ring-primary">
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Mode *</label>
+                        <select id="batch-mode" required onchange="toggleBatchLocation()"
+                            class="w-full px-4 py-2 border border-slate-600 rounded-lg focus:ring-2 focus:ring-primary">
+                            <option value="Online">Online</option>
+                            <option value="Offline">Offline</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Seats *</label>
+                        <input type="number" id="batch-seats" required value="30"
+                            class="w-full px-4 py-2 border border-slate-600 rounded-lg focus:ring-2 focus:ring-primary">
+                    </div>
+                </div>
+                <div id="batch-location-field">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Platform/Location *</label>
+                    <input type="text" id="batch-location" required
+                        class="w-full px-4 py-2 border border-slate-600 rounded-lg focus:ring-2 focus:ring-primary"
+                        placeholder="Zoom / Lab 101">
+                </div>
+                <div class="flex gap-3 pt-4">
+                    <button type="button" onclick="closeAddBatchModal()"
+                        class="flex-1 px-4 py-2.5 border border-slate-600 text-gray-700 rounded-lg font-medium hover:bg-slate-950">Cancel</button>
+                    <button type="submit"
+                        class="flex-1 px-4 py-2.5 bg-primary hover:bg-primary-hover text-white rounded-lg font-medium">Add
+                        Batch</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Add Course Modal -->
+    <div id="addCourseModal"
+        class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
+        <div class="bg-slate-900 rounded-2xl shadow-2xl max-w-2xl w-full p-6 max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-2xl font-bold text-white">Add New Course</h3>
+                <button onclick="closeAddCourseModal()" class="text-gray-400 hover:text-slate-400">
+                    <span class="material-symbols-outlined">close</span>
+                </button>
+            </div>
+            <form id="addCourseForm" class="space-y-4">
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Course Name *</label>
+                        <input type="text" id="course-name" required
+                            class="w-full px-4 py-2 border border-slate-600 rounded-lg focus:ring-2 focus:ring-primary"
+                            placeholder="Java Full Stack">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Instructor *</label>
+                        <input type="text" id="course-instructor" required
+                            class="w-full px-4 py-2 border border-slate-600 rounded-lg focus:ring-2 focus:ring-primary"
+                            placeholder="Prof. Name">
+                    </div>
+                </div>
+                <div class="grid grid-cols-3 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Fee (₹) *</label>
+                        <input type="number" id="course-fee" required
+                            class="w-full px-4 py-2 border border-slate-600 rounded-lg focus:ring-2 focus:ring-primary"
+                            placeholder="54999">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Level *</label>
+                        <select id="course-level" required
+                            class="w-full px-4 py-2 border border-slate-600 rounded-lg focus:ring-2 focus:ring-primary">
+                            <option value="Beginner">Beginner</option>
+                            <option value="Intermediate">Intermediate</option>
+                            <option value="Advanced">Advanced</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Start Date</label>
+                        <input type="text" id="course-start"
+                            class="w-full px-4 py-2 border border-slate-600 rounded-lg focus:ring-2 focus:ring-primary"
+                            placeholder="Jan 2026">
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Online % *</label>
+                        <input type="number" id="course-online" required min="0" max="100" value="50"
+                            class="w-full px-4 py-2 border border-slate-600 rounded-lg focus:ring-2 focus:ring-primary">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Offline % *</label>
+                        <input type="number" id="course-offline" required min="0" max="100" value="50"
+                            class="w-full px-4 py-2 border border-slate-600 rounded-lg focus:ring-2 focus:ring-primary">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Image URL</label>
+                    <input type="url" id="course-image"
+                        class="w-full px-4 py-2 border border-slate-600 rounded-lg focus:ring-2 focus:ring-primary"
+                        placeholder="https://...">
+                </div>
+                <div class="flex gap-3 pt-4">
+                    <button type="button" onclick="closeAddCourseModal()"
+                        class="flex-1 px-4 py-2.5 border border-slate-600 text-gray-700 rounded-lg font-medium hover:bg-slate-950">Cancel</button>
+                    <button type="submit"
+                        class="flex-1 px-4 py-2.5 bg-primary hover:bg-primary-hover text-white rounded-lg font-medium">Add
+                        Course</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Global data
+        let configData = null;
+        let allEnrollments = [];
+        let currentFilter = 'Pending';
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            loadConfigData();
+            loadEnrollments();
+            setupEventListeners();
+        });
+
+        // Load configuration
+        async function loadConfigData() {
+            try {
+                const response = await fetch('http://127.0.0.1:8080/api/hybrid-config');
+                const result = await response.json();
+
+                if (result.success && result.data) {
+                    configData = result.data;
+                    updateStats();
+                    renderBatches();
+                    renderCourses();
+                    populateSettings();
+                    populateBatchCourseDropdown();
+                }
+            } catch (error) {
+                console.error('Error loading config:', error);
+                showToast('Failed to load configuration', 'error');
+            }
+        }
+
+        // Load enrollments
+        async function loadEnrollments() {
+            try {
+                const response = await fetch('http://127.0.0.1:8080/api/enrollments/hybrid');
+                const result = await response.json();
+
+                if (result.success) {
+                    allEnrollments = result.enrollments || [];
+                    filterEnrollments();
+                    updateStats();
+                }
+            } catch (error) {
+                console.error('Error loading enrollments:', error);
+            }
+        }
+
+        // Update statistics
+        function updateStats() {
+            if (!configData) return;
+
+            document.getElementById('stat-batches').textContent = (configData.batches || []).length;
+            document.getElementById('stat-courses').textContent = (configData.courses || []).length;
+            document.getElementById('stat-pending').textContent = allEnrollments.filter(e => e.status === 'Pending').length;
+
+            // Count approved enrollments as total enrolled
+            const totalEnrolled = allEnrollments.filter(e => e.status === 'Approved').length;
+            document.getElementById('stat-enrolled').textContent = totalEnrolled;
+        }
+
+        // Render batches
+        function renderBatches() {
+            const container = document.getElementById('batches-list');
+            const batches = configData?.batches || [];
+
+            if (batches.length === 0) {
+                container.innerHTML = '<p class="text-slate-400 text-center py-8">No batches yet. Click "Add Batch" to create one.</p>';
+                return;
+            }
+
+            container.innerHTML = batches.map((batch, index) => {
+                const course = (configData.courses || []).find(c => c.id === batch.courseId);
+                const isOnline = batch.mode === 'Online';
+
+                return `
+                    <div class="bg-slate-950 rounded-lg p-4 border border-slate-700 hover:border-primary transition-colors">
+                        <div class="flex items-start justify-between">
+                            <div class="flex-1">
+                                <div class="flex items-center gap-3 mb-2">
+                                    <span class="px-3 py-1 rounded-full text-xs font-bold ${isOnline ? 'bg-blue-100 text-blue-700' : 'bg-orange-100 text-orange-700'}">
+                                        ${isOnline ? '📱 Online' : '🏢 Offline'}
+                                    </span>
+                                    <h3 class="font-bold text-white">${course?.name || 'Unknown Course'}</h3>
+                                </div>
+                                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm text-slate-400">
+                                    <div><span class="material-symbols-outlined text-[16px] align-middle">person</span> ${batch.faculty}</div>
+                                    <div><span class="material-symbols-outlined text-[16px] align-middle">calendar_today</span> ${batch.day}</div>
+                                    <div><span class="material-symbols-outlined text-[16px] align-middle">schedule</span> ${batch.startTime} - ${batch.endTime}</div>
+                                    <div><span class="material-symbols-outlined text-[16px] align-middle">${isOnline ? 'videocam' : 'location_on'}</span> ${batch.platform || batch.location || 'N/A'}</div>
+                                </div>
+                                <div class="mt-2 text-sm text-slate-400">
+                                    <span class="material-symbols-outlined text-[16px] align-middle">groups</span>
+                                    ${batch.enrolled || 0}/${batch.seats || 30} enrolled
+                                </div>
+                            </div>
+                            <button onclick="deleteBatch(${index})" class="text-red-500 hover:text-red-700 p-2">
+                                <span class="material-symbols-outlined">delete</span>
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Render courses
+        function renderCourses() {
+            const container = document.getElementById('courses-list');
+            const courses = configData?.courses || [];
+
+            if (courses.length === 0) {
+                container.innerHTML = '<p class="text-slate-400 text-center py-8 col-span-full">No courses yet. Click "Add Course" to create one.</p>';
+                return;
+            }
+
+            container.innerHTML = courses.map((course, index) => `
+                <div class="bg-slate-900 rounded-lg border border-slate-700 overflow-hidden hover:shadow-lg transition-shadow">
+                    <div class="h-32 bg-gradient-to-br from-blue-500 to-purple-600 relative">
+                        ${course.image ? `<img src="${course.image}" class="w-full h-full object-cover" alt="${course.name}">` : ''}
+                        <div class="absolute top-2 right-2 bg-slate-900 px-2 py-1 rounded text-xs font-bold">${course.onlinePercent || 50}% Online</div>
+                    </div>
+                    <div class="p-4">
+                        <h3 class="font-bold text-white mb-1">${course.name}</h3>
+                        <p class="text-sm text-slate-400 mb-3"><span class="material-symbols-outlined text-[14px] align-middle">person</span> ${course.instructor}</p>
+                        <div class="flex items-center justify-between text-sm">
+                            <span class="px-2 py-1 bg-gray-100 rounded text-gray-700">${course.level || 'Intermediate'}</span>
+                            <span class="font-bold text-white">₹${course.fee?.toLocaleString() || 'N/A'}</span>
+                        </div>
+                        <div class="flex items-center gap-2 mt-3">
+                            <button onclick="editCourse(${index})" class="flex-1 px-3 py-1.5 bg-blue-50 text-primary hover:bg-blue-100 rounded text-sm font-medium transition-colors">Edit</button>
+                            <button onclick="deleteCourse(${index})" class="flex-1 px-3 py-1.5 bg-red-50 text-red-600 hover:bg-red-100 rounded text-sm font-medium transition-colors">Delete</button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Edit course
+        async function editCourse(index) {
+            const course = configData.courses[index];
+            if (!course) return;
+
+            // Simple prompt for now, can be expanded to full modal later
+            const newFee = prompt(`Enter new fee for ${course.name}:`, course.fee);
+            if (newFee === null) return;
+
+            const fee = parseInt(newFee);
+            if (isNaN(fee) || fee < 0) {
+                showToast('Invalid fee', 'error');
+                return;
+            }
+
+            configData.courses[index].fee = fee;
+            configData.courses[index].price = fee; // Sync both fields if they exist
+
+            await saveConfig();
+            renderCourses();
+            updateStats();
+        }
+
+        // Filter enrollments
+        function filterEnrollments() {
+            const filter = document.getElementById('enrollment-filter').value;
+            currentFilter = filter;
+
+            let filtered = allEnrollments;
+            if (filter !== 'all') {
+                filtered = allEnrollments.filter(e => e.status === filter);
+            }
+
+            renderEnrollments(filtered);
+        }
+
+        // Render enrollments
+        function renderEnrollments(enrollments) {
+            const tbody = document.getElementById('enrollments-table');
+
+            if (!enrollments || enrollments.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="6" class="px-6 py-8 text-center text-slate-400">No ${currentFilter !== 'all' ? currentFilter.toLowerCase() : ''} enrollments found</td></tr>`;
+                return;
+            }
+
+            tbody.innerHTML = enrollments.map(enrollment => {
+                const statusColors = {
+                    'Pending': 'bg-yellow-100 text-yellow-800',
+                    'Approved': 'bg-green-100 text-green-800',
+                    'Rejected': 'bg-red-100 text-red-800'
+                };
+
+                const date = new Date(enrollment.enrolledAt).toLocaleDateString('en-IN', {
+                    day: '2-digit',
+                    month: 'short',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+
+                return `
+                    <tr class="hover:bg-slate-950">
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="font-medium text-white">${enrollment.studentName}</div>
+                            <div class="text-sm text-slate-400">${enrollment.email}</div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-400">${enrollment.phone || 'N/A'}</td>
+                        <td class="px-6 py-4">
+                            <div class="font-medium text-white">${enrollment.course || 'N/A'}</div>
+                            <div class="text-sm text-slate-400">${enrollment.batchDetails?.day || ''} ${enrollment.batchDetails?.time || ''}</div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-400">${date}</td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${statusColors[enrollment.status] || statusColors.Pending}">
+                                ${enrollment.status}
+                            </span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm">
+                            ${enrollment.status === 'Pending' ? `
+                                <button onclick="approveEnrollment('${enrollment.id}')" class="text-green-600 hover:text-green-900 mr-3">
+                                    <span class="material-symbols-outlined text-[20px]">check_circle</span>
+                                </button>
+                                <button onclick="rejectEnrollment('${enrollment.id}')" class="text-red-600 hover:text-red-900">
+                                    <span class="material-symbols-outlined text-[20px]">cancel</span>
+                                </button>
+                            ` : '-'}
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        // Approve enrollment
+        async function approveEnrollment(enrollmentId) {
+            if (!confirm('Approve this enrollment?')) return;
+
+            try {
+                const response = await fetch(`http://127.0.0.1:8080/api/enrollments/${enrollmentId}/approve`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ reviewedBy: 'Hybrid Admin' })
+                });
+
+                const result = await response.json();
+                if (result.success) {
+                    showToast('Enrollment approved!', 'success');
+                    loadEnrollments();
+                } else {
+                    showToast('Failed to approve enrollment', 'error');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                showToast('Server error', 'error');
+            }
+        }
+
+        // Reject enrollment
+        async function rejectEnrollment(enrollmentId) {
+            const reason = prompt('Enter rejection reason (optional):');
+            if (reason === null) return;
+
+            try {
+                const response = await fetch(`http://127.0.0.1:8080/api/enrollments/${enrollmentId}/reject`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ reviewedBy: 'Hybrid Admin', reason: reason || 'Not specified' })
+                });
+
+                const result = await response.json();
+                if (result.success) {
+                    showToast('Enrollment rejected', 'success');
+                    loadEnrollments();
+                } else {
+                    showToast('Failed to reject enrollment', 'error');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                showToast('Server error', 'error');
+            }
+        }
+
+        // Populate settings
+        function populateSettings() {
+            if (!configData.pricingTiers) configData.pricingTiers = { basic: 1999, standard: 4999, premium: 9999 };
+
+            document.getElementById('setting-title').value = configData.pageInfo?.title || '';
+            document.getElementById('setting-subtitle').value = configData.pageInfo?.subtitle || '';
+
+            document.getElementById('setting-price-basic').value = configData.pricingTiers.basic;
+            document.getElementById('setting-price-standard').value = configData.pricingTiers.standard;
+            document.getElementById('setting-price-premium').value = configData.pricingTiers.premium;
+
+            document.getElementById('setting-individual-enabled').checked = configData.individualCoursePricing?.enabled !== false;
+        }
+
+        // ... [skip] ...
+
+        // Settings form
+        document.getElementById('settings-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            if (!configData.pageInfo) configData.pageInfo = {};
+            if (!configData.pricingTiers) configData.pricingTiers = {};
+            if (!configData.individualCoursePricing) configData.individualCoursePricing = {};
+
+            configData.pageInfo.title = document.getElementById('setting-title').value;
+            configData.pageInfo.subtitle = document.getElementById('setting-subtitle').value;
+
+            configData.pricingTiers.basic = parseInt(document.getElementById('setting-price-basic').value) || 0;
+            configData.pricingTiers.standard = parseInt(document.getElementById('setting-price-standard').value) || 0;
+            configData.pricingTiers.premium = parseInt(document.getElementById('setting-price-premium').value) || 0;
+
+            configData.individualCoursePricing.enabled = document.getElementById('setting-individual-enabled').checked;
+
+            await saveConfig();
+        });
+        }
+
+        // Show toast
+        function showToast(message, type = 'success') {
+            const toast = document.createElement('div');
+            toast.className = `fixed bottom-5 right-5 ${type === 'success' ? 'bg-green-600' : 'bg-red-600'} text-white px-6 py-3 rounded-lg shadow-xl flex items-center gap-2 z-50`;
+            toast.innerHTML = `
+                <span class="material-symbols-outlined">${type === 'success' ? 'check_circle' : 'error'}</span>
+                <span>${message}</span>
+            `;
+            document.body.appendChild(toast);
+            setTimeout(() => toast.remove(), 3000);
+        }
+
+        // Auto-refresh every 30 seconds
+        setInterval(() => {
+            loadConfigData();
+            loadEnrollments();
+        }, 30000);
+    </script>
+</body>
+
+</html>
